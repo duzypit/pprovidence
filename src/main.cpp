@@ -1,6 +1,9 @@
-
-
+#include "../include/overseer.hpp"
+#include "../include/beholder.hpp"
+#include <iostream>
+#include <thread>
 int main(){
-
-	return 0;
+    std::cout << "Create Master" << std::endl;
+    Overseer Master;
+    return 0;
 }
