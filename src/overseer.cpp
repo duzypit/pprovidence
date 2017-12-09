@@ -1,23 +1,34 @@
-#include "../include/overseer.hpp"
+#ifndef __OVERSEER_HPP__
+#define __OVERSEER_HPP__
 
-Overseer::Overseer() : _data(10){
+#include <string>
+#include <vector>
+#include "beholder.cpp"
 
-}
+class Overseer{
+public:
+	Overseer();
 
-Overseer::~Overseer(){
+    ~Overseer();
 
-}
+    bool add(std::string ip, int port, int interval, std::string email){
+        Beholder Servant(ip, port, interval, email);
+        _data.push_back(Servant);
+        return true;
+    }
 
-bool Overseer::add(std::string ip, int port, int interval, std::string email){
-    Beholder Servant(ip, port, interval, email);
-    _data.push_back(Servant.observe());
-    return true;
-}
-bool Overseer::remove(int id){
-    //stub ;)
-    return true;
-}
-std::string Overseer::list(){
-    //stub ;)
-    return std::string("List of overseer jobs");
-}
+    bool remove(int id){
+        //stub ;)
+        std::cout << "Remove Beholder id:" << id << std::endl;
+        return true;
+    }
+
+    std::string list(){
+        //stub ;)
+        return std::string("List of overseer jobs");
+    }
+private:
+	std::vector<Beholder> _data;
+};
+
+#endif
