@@ -4,61 +4,66 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <boost/asio.hpp>
 
-class Beholder{
-private:
-    std::thread _job;
-	std::string _ip;
-	int _port;
-	int _interval;
-	std::string _email;
+using boost::asio::ip::tcp;
 
-public:
-    Beholder(std::string ip, int port, int interval, std::string email) : _job(), _ip(ip), _port(port), _interval(interval), _email(email) {
-
-        //setup
-        //create protocol minion
-        //start observation
-        //signal success/error
-        this->spawn();
-    }
-
-    ~Beholder(){
-        if(_job.joinable()) _job.join();
-    };
-
-    bool observe(){
-        std::cout << "Beholder thread start" << std::endl;
-        for(;;){
-            std::this_thread::sleep_for(std::chrono::seconds(_interval));
-            std::cout << "Beholder is watching: " << _ip << " " << _port << std::endl;
-
-        }
-        return true;
-    }
-
-    void spawn(){
-        this->_job =  std::thread(&Beholder::observe,this);
-    }
-
-    bool stop(){
-        _job.join();
-        return true;
-    }
+enum class Protocol {
+    ftp=20,
+    ssh = 22,
+    smtp=25,
+    http = 80,
+    pop3=110
 };
 
-class Overseer{
+struct Request{
+    std::string ip;
+    std::string email;
+    int interval;
+    int port;
+};
+
+class Beholder{
 public:
-	Overseer(){};
+	Beholder(){};
+    Beholder(Request r){ add(r); }
 
-    ~Overseer(){};
+    ~Beholder(){
+        for(std::thread &t : _threads){
+            t.join();
+        }
+    };
 
-    bool add(std::string ip, int port, int interval, std::string email){
-        Beholder servant(ip, port, interval, email);
-        _data.push_back(servant);
-        return true;
+    void observe(Request r){
+        try{
+            std::cout << "Beholder thread start " << r.ip <<  std::endl;
+            boost::asio::io_service io_service;
+            std::string tmpPort = std::to_string(r.port);
+            boost::asio::ip::tcp::resolver::query query(r.ip, tmpPort.c_str());
+            boost::asio::ip::tcp::resolver resolver(io_service);
+            boost::asio::ip::tcp::socket socket(io_service);
+            boost::system::error_code error;
+
+            std::array<char, 512> buf;
+            
+            for(;;){
+                std::this_thread::sleep_for(std::chrono::seconds(r.interval));
+                boost::asio::connect(socket, resolver.resolve(query));
+                std::size_t length = boost::asio::read(socket, boost::asio::buffer(buf, 512), boost::asio::transfer_all(), error);
+                std::cout << "Beholder is watching: " << r.ip << " " << r.port << " length: " << length << std::endl;
+
+            }
+        } catch (std::exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
     }
 
+
+    void add(Request r){
+        _data.push_back(r);
+        _threads.push_back(std::thread(&Beholder::observe, this, r));
+    }
+/*
     bool remove(int id){
         //stub ;)
         std::cout << "Remove Beholder id:" << id << std::endl;
@@ -67,17 +72,22 @@ public:
 
     std::string list(){
         //stub ;)
-        return std::string("List of overseer jobs");
+        return std::string("List of Beholder jobs");
     }
+*/
 private:
-	std::vector<Beholder> _data;
+    //Beholder worker;
+	std::vector<Request> _data;
+    std::vector<std::thread> _threads;
 };
 
 
 
 int main(){
+    Request r1 = {std::string("www.google.com"), std::string("tp@gmail.com"), 3, 80};
     std::cout << "Create Master" << std::endl;
-    Overseer Master;
-    Master.add(std::string("127.0.0.1"), 80, 3, std::string("tp@gmail.com"));
+    Beholder Master(r1);
+    //Request r2 = {std::string("127.0.0.123"), std::string("tp@gmail.com"), 5, 125};
+    //Master.add(r2);
     return 0;
 }
