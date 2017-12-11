@@ -1,0 +1,21 @@
+https://www.websequencediagrams.com
+
+title Project Providence
+
+User->Beholder: addRequest()
+Beholder->ProtocolMinion: createProtocolObject()
+ProtocolMinion->Beholder: returnProtocolObject()
+Beholder->Beholder: startThread()
+Beholder->Scribe: event()
+Scribe->Scribe: writeToFile()
+Scribe->Beholder: confirm()
+Beholder->PostMaster: send()
+PostMaster->PostMaster:send()
+Postmaster->Beholder: confirm()
+
+User->Beholder: listThreads()
+Beholder->User: returnList()
+
+User->Beholder:remove()
+Beholder->Beholder:stopthread()
+Beholder->User: confirm()
