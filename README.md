@@ -20,20 +20,20 @@
 
 ### Przypadek 1: uruchomienie programu
 
-1. Użytkownik uruchamia program, tworzone sš obiekty Beholder, Postmaster, Scribe
+1. Użytkownik uruchamia program, tworzone są obiekty Beholder, Postmaster, Scribe.
 2. Program umożliwia użytkownikowi dodanie adresu i portu do obserwacji (usługi) oraz interwału w jakim będzie sprawdzana dostępność usługi
 3. Użytkownik podaje dane wejściowe
-4. Program tworzy obiekt zawierajšcy dane usługi
-5. Program tworzy obiekt obsługujšcy wybrany protokół identyfikowany przez port
-6. Program na bazie powyższych tworzy wštek, który nie jest aktywny przez określony czas
-7. Po upływie interwału zestawiane jest polaczenie z usługš
-8. Jeżeli usługa działa, wštek jest usypiany na określony czas i program powraca do punktu 7.
+4. Program tworzy obiekt zawierający dane usługi
+5. Program tworzy obiekt obsługujący wybrany protokół identyfikowany przez port
+6. Program na bazie powyższych tworzy wątek, który nie jest aktywny przez określony czas
+7. Po upływie interwału zestawiane jest polaczenie z usługą
+8. Jeżeli usługa działa, wątek jest usypiany na określony czas i program powraca do punktu 7.
 9. Jeśli usługa nie działa, wštek komunikuje się z obiektami:
-* Postmaster - wysyłana jest wiadomoć na wskazany adres,
-* Scribe - zdarzenie logowane jest do pliku
-* Program wraca do punktu 7.
+      * Postmaster - wysyłana jest wiadomość na wskazany adres,
+      * Scribe - zdarzenie logowane jest do pliku
+      * Program wraca do punktu 7.
 
-### Przypadek 2, program jest uruchomiony,  monitoruje wczeniej wprowadzone usługi
+### Przypadek 2, program jest uruchomiony,  monitoruje wcześniej wprowadzone usługi
 
 1. Użytkownik wydaje polecenie wypisania monitorowanych usług
 2. Program wyświetla identyfikatory (unikatowe w obrębie programu) i dane monitorowanych usług (adres ip, port, interwał, e-mail do powiadamiania)
@@ -43,7 +43,9 @@
 2. Użytkownik podaje identyfikator
 3. Program zatrzymuje monitorowanie usługi, wštek jest "joinowany"
 
+## Diagram sekwencji
 
+![diagram sekwencji projek providence](https://github.com/duzypit/pprovidence/blob/master/docs/project_providence_seq_diag.png?raw=true)
 
 ## Ramka danych dla protokołów TCP/IP
 
