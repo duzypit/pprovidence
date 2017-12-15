@@ -41,7 +41,7 @@
 ### Przypadek 3, program jest uruchomiony, monitoruje wcześniej wprowadzone usługi, użytkownik zna identyfikatory monitorowanych usług
 1. Program umożliwia użytkownikowi podanie identyfikatora monitorowanej usługi do zatrzymania
 2. Użytkownik podaje identyfikator
-3. Program zatrzymuje monitorowanie usługi, wštek jest "joinowany"
+3. Program zatrzymuje monitorowanie usługi, wątek jest "joinowany"
 
 ## Diagram sekwencji
 
@@ -49,7 +49,12 @@
 
 ## Ramka danych dla protokołów TCP/IP
 
-Datagram ITCP
+Datagram TCP
+![datagram TCP](https://github.com/duzypit/pprovidence/blob/master/docs/tcp_udp_headers.jpg?raw=true)
+
+Połączenie klient - serwer
+![klient - serwer](https://github.com/duzypit/pprovidence/blob/master/docs/TCP_IP_socket_diagram.png?raw=true)
+
 
 
 
