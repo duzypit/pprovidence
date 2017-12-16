@@ -4,9 +4,7 @@
 #include <vector>
 #include <string>
 #include <chrono>
-#include <boost/asio.hpp>
 
-using boost::asio::ip::tcp;
 
 enum class Protocol {
     ftp=20,
@@ -23,71 +21,66 @@ struct Request{
     int port;
 };
 
+class protocolMinion{
+    public:
+    protocolMinion(Request r) : _thread(), _stop_thread(false), _r(r) {}
+    ~protocolMinion(){
+        _stop_thread = true;
+        if(_thread.joinable()) _thread.join();
+    }
+
+    protocolMinion(const protocolMinion&) = delete;
+    protocolMinion(protocolMinion &&) = delete;
+
+    void start(){
+        _thread = std::thread(&protocolMinion::observe, this);
+    }
+
+    private:
+        std::thread _thread;
+        bool _stop_thread;
+        Request _r;
+        void observe(){
+            while(!_stop_thread){
+                std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
+                std::cout << "protocolMinion is watching: " << _r.ip << " " << _r.port << std::endl;
+
+
+            }
+        }
+};
+
 class Beholder{
 public:
 	Beholder(){};
     Beholder(Request r){ add(r); }
 
-    ~Beholder(){
-        for(std::thread &t : _threads){
-            t.join();
-        }
-    };
-
-    void observe(Request r){
-        try{
-            std::cout << "Beholder thread start " << r.ip <<  std::endl;
-            boost::asio::io_service io_service;
-            std::string tmpPort = std::to_string(r.port);
-            boost::asio::ip::tcp::resolver::query query(r.ip, tmpPort.c_str());
-            boost::asio::ip::tcp::resolver resolver(io_service);
-            boost::asio::ip::tcp::socket socket(io_service);
-            boost::system::error_code error;
-
-            std::array<char, 512> buf;
-            
-            for(;;){
-                std::this_thread::sleep_for(std::chrono::seconds(r.interval));
-                boost::asio::connect(socket, resolver.resolve(query));
-                std::size_t length = boost::asio::read(socket, boost::asio::buffer(buf, 512), boost::asio::transfer_all(), error);
-                std::cout << "Beholder is watching: " << r.ip << " " << r.port << " length: " << length << std::endl;
-
-            }
-        } catch (std::exception& e) {
-            std::cerr << e.what() << std::endl;
-        }
-    }
-
+    ~Beholder(){};
 
     void add(Request r){
-        _data.push_back(r);
-        _threads.push_back(std::thread(&Beholder::observe, this, r));
-    }
-/*
-    bool remove(int id){
-        //stub ;)
-        std::cout << "Remove Beholder id:" << id << std::endl;
-        return true;
+        auto tmp = std::make_shared<protocolMinion>(r);
+        tmp -> start();
+        _threads.push_back(tmp);
     }
 
-    std::string list(){
-        //stub ;)
-        return std::string("List of Beholder jobs");
-    }
-*/
+    bool remove(int id);
+
+    std::string list();
+
 private:
     //Beholder worker;
-	std::vector<Request> _data;
-    std::vector<std::thread> _threads;
+    std::vector<std::shared_ptr<protocolMinion>> _threads;
 };
 
 
 
 int main(){
-    Request r1 = {std::string("www.google.com"), std::string("tp@gmail.com"), 3, 80};
+    //google
+    Request r1 = {std::string("172.217.16.3"), std::string("tp@gmail.com"), 3, 80};
     std::cout << "Create Master" << std::endl;
     Beholder Master(r1);
-    //Request r2 = {std::string("127.0.0.123"), std::string("tp@gmail.com"), 5, 125};
-    //Master.add(r2);
+    Request r2 = {std::string("127.0.0.123"), std::string("tp@gmail.com"), 5, 125};
+    Master.add(r2);
+    std::cin.get();
     return 0;
 }
