@@ -1,8 +1,6 @@
 main:
-	g++ -Wall -Wextra main.cpp -std=c++11 -lboost_system -lpthread
+	g++ -Wall -Wextra main.cpp -std=c++14 -pthread
 
-asio:
-	g++ -g -Wall -Wextra asio_test.cpp -std=c++11 -lboost_system -lpthread
 run:
 	./a.out
 
