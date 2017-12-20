@@ -3,6 +3,8 @@
 
 #include <thread>
 #include <iostream>
+#include <mutex>
+#include <deque>
 
 #include "../include/datatypes.hpp"
 
@@ -17,9 +19,9 @@ class Beholder{
     Beholder(const Beholder&) = delete;
     Beholder(Beholder &&) = delete;
 
-    void start(){
+    void start(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex){
         _stop_thread = false;
-        _thread = std::thread(&Beholder::observe, this);
+        _thread = std::thread(&Beholder::observe, this, std::ref(overseerMsgQueue), std::ref(overseerMutex));
     }
 
     void stop(){
@@ -48,10 +50,13 @@ class Beholder{
 
     private:
         std::thread _thread;
+
         //ture - stopped, false - working
         bool _stop_thread;
+
         Request _r;
-        void observe(){
+
+        void observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex){
             while(!_stop_thread){
                 std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
                 std::cout << "Beholder: watching: " << _r.ip << " " << _r.port << std::endl;
