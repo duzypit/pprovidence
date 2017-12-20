@@ -10,7 +10,7 @@
 #include "../include/commandParser.hpp"
 #include "../include/overseer.hpp"
 #include "../include/beholder.cpp"
-
+#include "../include/scribe.cpp"
 
 
 int main(){
@@ -20,7 +20,7 @@ int main(){
     //Beholder Master(r1);
     //Request r2 = {std::string("127.0.0.123"), std::string("tp@gmail.com"), 5, 125};
     //Master.add(r2);
-    Overseer master;
+    Overseer master("log.txt");
     std::string command;
 
     std::cout << std::string(80, '\n');
