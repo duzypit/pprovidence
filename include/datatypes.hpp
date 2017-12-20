@@ -1,6 +1,7 @@
 #ifndef __DATATYPES__
 #define __DATATYPES__
 #include <string>
+#include <chrono>
 
 enum class Protocol {
     ftp=20,
@@ -16,8 +17,10 @@ struct Request{
     std::string email;
     int interval;
     int port;
-    int job_id;
+    std::size_t job_id;
     char command;
 };
 
-#endif
+struct Report : public Request {
+    std::time_t event_time;
+};
