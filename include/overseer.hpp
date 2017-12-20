@@ -3,14 +3,17 @@
 #include <thread>
 #include <vector>
 #include <algorithm>
+#include <deque>
+#include <mutex>
 
 #include "../include/datatypes.hpp"
 #include "../include/beholder.cpp"
+#include "../include/scribe.cpp"
 
 class Overseer{
 public:
-	Overseer(){};
-    Overseer(Request r){ add(r); }
+	Overseer(std::string filename) : _scribe(filename) {};
+     // Overseer(Request r){ add(r); }
 
     ~Overseer(){};
 
@@ -23,7 +26,7 @@ public:
                 list_jobs();
                 break;
             case 'd':
-
+                remove(r.job_id);
                 break;
 
             default:
@@ -61,6 +64,9 @@ public:
 
 private:
     std::vector<std::shared_ptr<Beholder>> _threads;
+    std::deque<Report> _msgQueue;
+    Scribe _scribe;
+    std::mutex _mutex;
 };
 
 #endif
