@@ -12,7 +12,6 @@ enum class Protocol {
 };
 
 struct Request{
-
     std::string ip;
     std::string email;
     int interval;
@@ -22,5 +21,18 @@ struct Request{
 };
 
 struct Report : public Request {
+    Report(){}
+
+    Report(const Request& r) {
+        ip = r.ip;
+        email = r.email;
+        interval = r.interval;
+        port = r.port;
+        job_id = r.job_id;
+        command = r.command;
+    }
+
     std::time_t event_time;
+    std::string msg;
 };
+#endif
