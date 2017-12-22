@@ -5,7 +5,10 @@
 #include <iostream>
 #include <mutex>
 #include <deque>
-#include <chrono>
+#include <ctime>
+#include <string>
+#include <sstream>
+#include <condition_variable>
 
 #include "../include/datatypes.hpp"
 
@@ -20,9 +23,9 @@ class Beholder{
     Beholder(const Beholder&) = delete;
     Beholder(Beholder &&) = delete;
 
-    void start(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex){
+    void start(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar, std::mutex& overseerMutex){
         _stop_thread = false;
-        _thread = std::thread(&Beholder::observe, this, std::ref(overseerMsgQueue), std::ref(overseerMutex));
+        _thread = std::thread(&Beholder::observe, this, std::ref(overseerMsgQueue), std::ref(overseerCondVar), std::ref(overseerMutex));
     }
 
     void stop(){
@@ -57,17 +60,24 @@ class Beholder{
 
         Request _r;
 
-        void observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex){
+        void observe(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar, std::mutex& overseerMutex){
             while(!_stop_thread){
                 std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
-                //create queue entry
-                //lock
                 Report error(_r);
-                //std::string msg;
-                error.event_time = std::chrono::now;
-                error.msg =  "Beholder: watching: " + _r.ip + " " + _r.port;
-                std::lock_guard<std::mutex> guard(overseerMutex);
+                error.event_time = std::time(nullptr);
+
+                std::ostringstream oss;
+                oss << std::asctime(std::localtime(&error.event_time));
+                oss << "Beholder: watching: ";
+                oss << _r.ip;
+                oss << " ";
+                oss << std::to_string(_r.port);
+                error.msg = oss.str();
+
+                std::unique_lock<std::mutex> lock(overseerMutex);
                 overseerMsgQueue.push_back(error);
+                lock.unlock();
+                overseerCondVar.notify_one();
             }
         }
 };

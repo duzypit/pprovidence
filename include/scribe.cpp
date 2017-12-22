@@ -3,27 +3,53 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <mutex>
+#include <deque>
+#include <thread>
+#include <condition_variable>
+
+#include "../include/datatypes.hpp"
 
 class Scribe{
 public:
     Scribe(const std::string& file) : _file(file.c_str(), std::ios::ate) {}
 
     ~Scribe(){
+        _stop_thread = true;
+        if(_thread.joinable()) _thread.join();
         _file.close();
     }
 
-    void setup(){
-
+    void start(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar,  std::mutex& overseerMutex){
+        _stop_thread = false;
+        _thread = std::thread(&Scribe::observe, this, std::ref(overseerMsgQueue), std::ref(overseerCondVar), std::ref(overseerMutex));
     }
 
     //save smtn to file
-    void save(){
-
-    //_file << "data" << std::endl;
+    void save(const Report& e){
+        _file << e.msg << std::endl;
     }
 
 private:
     std::ofstream _file;
+    std::thread _thread;
+    bool _stop_thread;
+
+    void observe(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar, std::mutex& overseerMutex){
+        Report e;
+        for(;;){
+            std::unique_lock<std::mutex> lock(overseerMutex);
+            overseerCondVar.wait(lock);
+            if(!overseerMsgQueue.empty()){
+                e = overseerMsgQueue[0];
+                overseerMsgQueue.pop_front();
+            }
+
+            lock.unlock();
+            save(e);
+            //write to file
+        }
+    }
 };
 
 #endif
