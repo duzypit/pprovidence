@@ -39,7 +39,7 @@ int main(){
             std::cout << "\td job_id - delete job" <<std::endl;
             std::cout << std::endl;
         } else if(command == "q") {
-            break;
+            return 0;
         } else {
             cparser.parse(command);
             master.dispatch(cparser.req_struct());
