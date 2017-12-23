@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <deque>
 #include <mutex>
-#include <condition_variable>
+//#include <condition_variable>
 
 #include "../include/datatypes.hpp"
 #include "../include/beholder.cpp"
@@ -14,7 +14,7 @@
 class Overseer{
 public:
 	Overseer(std::string filename) : _scribe(filename) {
-        _scribe.start(std::ref(_msgQueue), std::ref(_condVar), std::ref(_mutex));
+        _scribe.start(std::ref(_msgQueue),/* std::ref(_condVar),*/ std::ref(_mutex));
     };
      // Overseer(Request r){ add(r); }
 
@@ -39,7 +39,7 @@ public:
 
     void add(const Request& r){
         auto tmp = std::make_shared<Beholder>(r);
-        tmp -> start(std::ref(_msgQueue), std::ref(_condVar), std::ref(_mutex));
+        tmp -> start(std::ref(_msgQueue), /*std::ref(_condVar),*/ std::ref(_mutex));
         _threads.push_back(tmp);
     }
 
@@ -70,7 +70,7 @@ private:
     std::deque<Report> _msgQueue;
     Scribe _scribe;
     std::mutex _mutex;
-    std::condition_variable _condVar;
+    //std::condition_variable _condVar;
 };
 
 #endif

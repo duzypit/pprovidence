@@ -8,7 +8,7 @@
 #include <ctime>
 #include <string>
 #include <sstream>
-#include <condition_variable>
+//#include <condition_variable>
 
 #include "../include/datatypes.hpp"
 
@@ -17,15 +17,19 @@ class Beholder{
     Beholder(Request r) : _thread(), _stop_thread(true), _r(r) {}
     ~Beholder(){
         _stop_thread = true;
-        if(_thread.joinable()) _thread.join();
+        if(_thread.joinable()) {
+            std::cout << "Beholder.join()" << std::endl;
+            _thread.join();
+            std::cout << "Beholder joinde!" << std::endl;
+        }
     }
 
     Beholder(const Beholder&) = delete;
     Beholder(Beholder &&) = delete;
 
-    void start(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar, std::mutex& overseerMutex){
+    void start(std::deque<Report>& overseerMsgQueue,/* std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex){
         _stop_thread = false;
-        _thread = std::thread(&Beholder::observe, this, std::ref(overseerMsgQueue), std::ref(overseerCondVar), std::ref(overseerMutex));
+        _thread = std::thread(&Beholder::observe, this, std::ref(overseerMsgQueue), /*std::ref(overseerCondVar),*/ std::ref(overseerMutex));
     }
 
     void stop(){
@@ -60,7 +64,7 @@ class Beholder{
 
         Request _r;
 
-        void observe(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar, std::mutex& overseerMutex){
+        void observe(std::deque<Report>& overseerMsgQueue, /*std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex){
             while(!_stop_thread){
                 std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
                 Report error(_r);
@@ -77,7 +81,7 @@ class Beholder{
                 std::unique_lock<std::mutex> lock(overseerMutex);
                 overseerMsgQueue.push_back(error);
                 lock.unlock();
-                overseerCondVar.notify_one();
+                //overseerCondVar.notify_one();
             }
         }
 };
