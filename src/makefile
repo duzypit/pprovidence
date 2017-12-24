@@ -1,5 +1,5 @@
 main:
-	g++ -Wall -Wextra main.cpp -std=c++14 -pthread
+	g++ -Wall -Wextra practicalSocket.cpp main.cpp -std=c++14 -pthread
 
 run:
 	./a.out
