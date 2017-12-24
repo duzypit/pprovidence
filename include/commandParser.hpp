@@ -21,7 +21,7 @@ public:
                 _data.ip = splittedSource[1];
                 _data.email = splittedSource[4];
                 _data.interval = atoi(splittedSource[3].c_str());
-                _data.port = 2;
+                _data.port = atoi(splittedSource[2].c_str());
             } else {
                 std::cout << "commandParser: too few args for add command. Aborted." << std::endl;
             }
