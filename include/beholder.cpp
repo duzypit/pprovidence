@@ -8,9 +8,9 @@
 #include <ctime>
 #include <string>
 #include <sstream>
-//#include <condition_variable>
 
 #include "../include/datatypes.hpp"
+#include "../include/practicalSocket.h"
 
 class Beholder{
     public:
@@ -65,10 +65,16 @@ class Beholder{
         Request _r;
 
         void observe(std::deque<Report>& overseerMsgQueue, /*std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex){
+            TCPSocket sock(_r.ip, _r.port);
+            std::cout << "Port: " << _r.port << std::endl;
+            std::string msg("GET /\n");
+            char buffer[1024];
             while(!_stop_thread){
                 std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
                 Report error(_r);
                 error.event_time = std::time(nullptr);
+                sock.send(msg.c_str(), msg.length());
+                sock.recv(buffer, 1023);
 
                 std::ostringstream oss;
                 oss << std::asctime(std::localtime(&error.event_time));
@@ -76,6 +82,8 @@ class Beholder{
                 oss << _r.ip;
                 oss << " ";
                 oss << std::to_string(_r.port);
+                oss << " ";
+                oss << buffer;
                 error.msg = oss.str();
 
                 std::unique_lock<std::mutex> lock(overseerMutex);
