@@ -65,25 +65,37 @@ class Beholder{
         Request _r;
 
         void observe(std::deque<Report>& overseerMsgQueue, /*std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex){
-            TCPSocket sock(_r.ip, _r.port);
-            std::cout << "Port: " << _r.port << std::endl;
-            std::string msg("GET /\n");
+            //std::cout << "Port: " << _r.port << std::endl;
+            std::string protocolRequest("GET /\n");
             char buffer[1024];
             while(!_stop_thread){
                 std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
+                std::string connectionResult;
+                try{
+                    TCPSocket sock(_r.ip, _r.port);
+
+                    sock.send(protocolRequest.c_str(), protocolRequest.length());
+                    std::size_t recievedDataSize = 0;
+                    recievedDataSize = sock.recv(buffer, 1023);
+                    if(recievedDataSize > 0){
+                        connectionResult = buffer;
+                    } else {
+                        connectionResult = "Connection established, but recieved 0 bytes.";
+                    }
+                } catch (const SocketException& e) {
+                    connectionResult = e.what();
+                }
                 Report error(_r);
                 error.event_time = std::time(nullptr);
-                sock.send(msg.c_str(), msg.length());
-                sock.recv(buffer, 1023);
 
                 std::ostringstream oss;
                 oss << std::asctime(std::localtime(&error.event_time));
-                oss << "Beholder: watching: ";
+                oss << "Beholder is watching: ";
                 oss << _r.ip;
                 oss << " ";
                 oss << std::to_string(_r.port);
                 oss << " ";
-                oss << buffer;
+                oss << connectionResult;
                 error.msg = oss.str();
 
                 std::unique_lock<std::mutex> lock(overseerMutex);
