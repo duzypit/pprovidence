@@ -45,11 +45,11 @@ public:
             }
 
 
-        } else if(_data.command == 'd'){
+        } else if(_data.command == 's'){
             if(splittedSource.size() >= 2) {
                 _data.job_id = atoi(splittedSource[1].c_str());
             } else {
-                std::cout << "commandParser: too few args for delete command. Aborted." << std::endl;
+                std::cout << "commandParser: too few args for stop command. Aborted." << std::endl;
             }
 
         }
