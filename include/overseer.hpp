@@ -63,10 +63,9 @@ public:
             std::setw(20) << std::left <<
             "e-mail " <<
             std::setw(20) << std::left <<
-
             "sleeping/working" <<
-
             std::endl;
+
             for(auto& b : _threads ){
                 std::cout <<
                 std::setw(4) << std::left <<
