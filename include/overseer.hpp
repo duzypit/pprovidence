@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <deque>
 #include <mutex>
+#include <iomanip> //std::setw()
 //#include <condition_variable>
 
 #include "../include/datatypes.hpp"
@@ -50,15 +51,37 @@ public:
 
     void list_jobs(){
         if(_threads.size() != 0) {
-            std::cout << "id " << "ip " << "port " << "interval " << "email " << "sleeping/working" << std::endl;
+            std::cout <<
+            std::setw(4) << std::left <<
+            "id" <<
+            std::setw(20) << std::left <<
+            "ip" <<
+            std::setw(8) << std::left <<
+            "port" <<
+            std::setw(15) << std::left <<
+            "interval (s)" <<
+            std::setw(20) << std::left <<
+            "e-mail " <<
+            std::setw(20) << std::left <<
+
+            "sleeping/working" <<
+
+            std::endl;
             for(auto& b : _threads ){
-                std::cout << std::distance(_threads.begin(), std::find(_threads.begin(), _threads.end(), b)) << " "
-                    << b->ip() << " "
-                    << b->port() << " "
-                    << b->interval() << " "
-                    << b->email() << " "
-                    << (b->stopped() ? "sleeping" : "working") << " "
-                    << std::endl;
+                std::cout <<
+                std::setw(4) << std::left <<
+                std::distance(_threads.begin(), std::find(_threads.begin(), _threads.end(), b)) <<
+                std::setw(20) << std::left <<
+                b->ip() <<
+                std::setw(8) << std::left <<
+                b->port() <<
+                std::setw(15) << std::left <<
+                b->interval() <<
+                std::setw(20) << std::left <<
+                b->email() <<
+                std::setw(20) << std::left <<
+                (b->stopped() ? "sleeping" : "working") <<
+                std::endl;
             }
         } else {
             std::cout << "Overseer: no jobs to list." << std::endl;
