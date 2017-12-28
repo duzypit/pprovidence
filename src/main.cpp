@@ -34,9 +34,9 @@ int main(){
         if(command == "?"){
             std::cout << std::endl;
             std::cout << "Commands:" << std::endl;
-            std::cout << "\ta adress 20|22|25|80|110 interval email - add adress to watch, interval in seconds" << std::endl;
+            std::cout << "\ta <adress> <20|22|25|80|110> <interval> <email> - add adress to watch, interval in seconds" << std::endl;
             std::cout << "\tl - list all current jobs with id's" << std::endl;
-            std::cout << "\td job_id - delete job" <<std::endl;
+            std::cout << "\ts <job_id> - stop job" <<std::endl;
             std::cout << std::endl;
         } else if(command == "q") {
             return 0;
