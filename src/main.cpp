@@ -11,7 +11,7 @@
 #include "../include/overseer.hpp"
 #include "../include/beholder.cpp"
 #include "../include/scribe.cpp"
-#include "../include/practicalSocket.h"
+#include "../lib/practicalSocket.h"
 
 int main(){
     //google

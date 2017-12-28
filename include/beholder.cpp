@@ -10,7 +10,7 @@
 #include <sstream>
 
 #include "../include/datatypes.hpp"
-#include "../include/practicalSocket.h"
+#include "../lib/practicalSocket.h"
 
 class Beholder{
     public:
