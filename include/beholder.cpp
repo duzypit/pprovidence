@@ -41,7 +41,7 @@ class Beholder{
     }
 
     int port(){
-        return _r.port;
+        return static_cast<int>(_r.port);
     }
 
     int interval(){
@@ -72,7 +72,7 @@ class Beholder{
                 std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
                 std::string connectionResult;
                 try{
-                    TCPSocket sock(_r.ip, _r.port);
+                    TCPSocket sock(_r.ip, static_cast<int>(_r.port));
 
                     sock.send(protocolRequest.c_str(), protocolRequest.length());
                     std::size_t recievedDataSize = 0;
@@ -93,7 +93,7 @@ class Beholder{
                 oss << "Beholder is watching: ";
                 oss << _r.ip;
                 oss << " ";
-                oss << std::to_string(_r.port);
+                oss << std::to_string(static_cast<int>(_r.port));
                 oss << " ";
                 oss << connectionResult;
                 error.msg = oss.str();

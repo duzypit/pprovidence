@@ -21,7 +21,25 @@ public:
                 _data.ip = splittedSource[1];
                 _data.email = splittedSource[4];
                 _data.interval = atoi(splittedSource[3].c_str());
-                _data.port = atoi(splittedSource[2].c_str());
+                //_data.port = atoi(splittedSource[2].c_str())
+                //pftp|ssh|smtp|http|pop3 ;
+                switch(atoi(splittedSource[2].c_str())) {
+                    case 20:
+                            _data.port = Protocol::ftp;
+                        break;
+                    case 22:
+                            _data.port = Protocol::ssh;
+                        break;
+                    case 25:
+                            _data.port = Protocol::smtp;
+                        break;
+                    case 110:
+                            _data.port = Protocol::pop3;
+                        break;
+                    default:
+                            _data.port = Protocol::http;
+                        break;
+                }
             } else {
                 std::cout << "commandParser: too few args for add command. Aborted." << std::endl;
             }
@@ -57,7 +75,8 @@ public:
         std::cout << "command: " << _data.command << std::endl;
         if(_data.command == 'a'){
             std::cout << "ip: " << _data.ip << std::endl;
-            std::cout << "port: " << _data.port << std::endl;
+            //std::cout << "port: " << _data.port << std::endl;
+            std::cout << "port: " << static_cast<int>(_data.port) <<std::endl;
             std::cout << "interval (s): " << _data.interval << std::endl;
             std::cout << "email: " << _data.email << std::endl;
         }
