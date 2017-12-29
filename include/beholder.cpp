@@ -10,6 +10,7 @@
 
 #include "../include/datatypes.hpp"
 #include "../lib/practicalSocket.h"
+#include "protocolMinion.hpp"
 
 class Beholder{
     public:
@@ -65,10 +66,13 @@ class Beholder{
 
         void observe(std::deque<Report>& overseerMsgQueue, /*std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex){
             std::string protocolRequest("GET /\n");
-            char buffer[1024];
+//            char buffer[1024];
             while(!_stop_thread){
                 Report error(_r);
                 std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
+                ProtocolMinion socket(_r.ip, static_cast<int>(_r.port));
+                error.msg = socket.result();
+/*
                 try{
                     TCPSocket sock(_r.ip, static_cast<int>(_r.port));
 
@@ -85,6 +89,7 @@ class Beholder{
                 } catch (const SocketException& e) {
                     error.msg = e.what();
                 }
+*/
                 error.event_time = std::time(nullptr);
                 std::unique_lock<std::mutex> lock(overseerMutex);
                 overseerMsgQueue.push_back(error);
