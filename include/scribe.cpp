@@ -46,7 +46,6 @@ private:
                 std::ostringstream oss;
                 std::tm tm = *std::localtime(&e.event_time);
                 oss << std::put_time(&tm, "%F %T");
-                //oss << std::asctime(std::localtime(&e.event_time));
                 oss << " ";
                 oss << e.ip;
                 oss << " ";
@@ -66,13 +65,9 @@ private:
                 e = overseerMsgQueue[0];
                 overseerMsgQueue.pop_front();
                 lock.unlock();
-                //create/format message
-
                 save(e);
             }
-            //write to file
         }
-
     }
 };
 
