@@ -7,7 +7,6 @@
 #include <deque>
 #include <ctime>
 #include <string>
-#include <sstream>
 
 #include "../include/datatypes.hpp"
 #include "../lib/practicalSocket.h"
@@ -65,39 +64,28 @@ class Beholder{
         Request _r;
 
         void observe(std::deque<Report>& overseerMsgQueue, /*std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex){
-            //std::cout << "Port: " << _r.port << std::endl;
             std::string protocolRequest("GET /\n");
             char buffer[1024];
             while(!_stop_thread){
+                Report error(_r);
                 std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
-                std::string connectionResult;
                 try{
                     TCPSocket sock(_r.ip, static_cast<int>(_r.port));
 
                     sock.send(protocolRequest.c_str(), protocolRequest.length());
                     std::size_t recievedDataSize = 0;
                     recievedDataSize = sock.recv(buffer, 1023);
+                    buffer[1023] = '\0';
+
                     if(recievedDataSize > 0){
-                        connectionResult = buffer;
+                        error.msg = "Connection OK.";
                     } else {
-                        connectionResult = "Connection established, but recieved 0 bytes.";
+                        error.msg = "Connection established, recieved 0 bytes.";
                     }
                 } catch (const SocketException& e) {
-                    connectionResult = e.what();
+                    error.msg = e.what();
                 }
-                Report error(_r);
                 error.event_time = std::time(nullptr);
-
-                std::ostringstream oss;
-                oss << std::asctime(std::localtime(&error.event_time));
-                oss << "Beholder is watching: ";
-                oss << _r.ip;
-                oss << " ";
-                oss << std::to_string(static_cast<int>(_r.port));
-                oss << " ";
-                oss << connectionResult;
-                error.msg = oss.str();
-
                 std::unique_lock<std::mutex> lock(overseerMutex);
                 overseerMsgQueue.push_back(error);
                 lock.unlock();
