@@ -29,7 +29,7 @@ public:
             case 'l':
                 list_jobs();
                 break;
-            case 'd':
+            case 's':
                 remove(r.job_id);
                 break;
 
