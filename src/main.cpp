@@ -12,6 +12,7 @@
 #include "../include/beholder.cpp"
 #include "../include/scribe.cpp"
 #include "../lib/practicalSocket.h"
+#include "../include/protocolMinion.hpp"
 
 int main(){
     //google
