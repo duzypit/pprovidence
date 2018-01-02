@@ -18,6 +18,7 @@ struct Request{
     Protocol port;
     std::size_t job_id;
     char command;
+    bool valid;
 };
 
 struct Report : public Request {
