@@ -156,6 +156,24 @@ void Socket::setLocalAddressAndPort(const string &localAddress,
   }
 }
 
+void Socket::setSendTimeout(const int &sec, const int &usec) throw(SocketException) {
+    struct timeval timeout;
+    timeout.tv_sec = sec;
+    timeout.tv_usec = usec;
+    if (setsockopt (sockDesc, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,sizeof(timeout)) < 0)
+        throw SocketException("Set of send timeout failed (setsockopt())", true);
+}
+
+
+void Socket::setRecieveTimeout(const int &sec, const int &usec) throw(SocketException) {
+    struct timeval timeout;
+    timeout.tv_sec = sec;
+    timeout.tv_usec = usec;
+    if (setsockopt (sockDesc, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,sizeof(timeout)) < 0)
+        throw SocketException("Set of recieve timeout failed (setsockopt())", true);
+}
+
+
 void Socket::cleanUp() throw(SocketException) {
   #ifdef WIN32
     if (WSACleanup() != 0) {
