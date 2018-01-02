@@ -14,10 +14,11 @@ public:
 
     commandParser& parse(const std::string& source){
         std::vector<std::string> splittedSource = split(source, ' ');
-
+        _data.valid = false;
         _data.command = splittedSource[0][0];
         if(_data.command == 'a'){
             if(splittedSource.size() == 5){
+
                 _data.ip = splittedSource[1];
                 _data.email = splittedSource[4];
                 _data.interval = atoi(splittedSource[3].c_str());
@@ -40,6 +41,8 @@ public:
                             _data.port = Protocol::http;
                         break;
                 }
+
+                _data.valid = true;
             } else {
                 std::cout << "commandParser: too few args for add command. Aborted." << std::endl;
             }
@@ -48,6 +51,7 @@ public:
         } else if(_data.command == 's'){
             if(splittedSource.size() >= 2) {
                 _data.job_id = atoi(splittedSource[1].c_str());
+                _data.valid = true;
             } else {
                 std::cout << "commandParser: too few args for stop command. Aborted." << std::endl;
             }
@@ -92,6 +96,9 @@ public:
         return _data;
     }
 
+    bool valid() const noexcept {
+        return _data.valid;
+    }
     //void clear();
 
 private:
