@@ -6,11 +6,17 @@
 
 class ProtocolMinion{
 public:
-    ProtocolMinion(std::string address, int port) {
+    ProtocolMinion(std::string address, int port, int timeoutSec = 2, int timeoutUsec = 0) {
         switch(port){
+            //no need for comand 20/ftp,
+            // 25/smtp also
+            //
             case 80:
                 _requestCommand = "GET /\n";
                 break;
+            case 22:
+                //line must be terminated by CR LF
+                _requestCommand = "SSH-2.0-billsSSH_3.6.3q3\r\n";
             default:
                 _requestCommand = "";
 
@@ -19,7 +25,7 @@ public:
         try{
             char buffer[1024];
             TCPSocket sock(address, port);
-
+            sock.setSendTimeout(timeoutSec, timeoutUsec);
             sock.send(_requestCommand.c_str(), _requestCommand.length());
             std::size_t recievedDataSize = 0;
             recievedDataSize = sock.recv(buffer, 1023);
