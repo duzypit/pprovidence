@@ -1,0 +1,32 @@
+#. ~/.aliases
+#push
+alias gpo 'git push origin'
+alias gpg 'git push origin HEAD:refs/for/'
+
+#add, branch, check in/out
+alias ga 'git add'
+alias gb 'git branch'
+alias gbv 'git branch -vv'
+alias gca 'git commit –a -C HEAD'
+alias gci 'git commit'
+alias gco 'git checkout'
+alias go 'git checkout'
+
+#status
+alias gs 'git status'
+alias gsb 'git status -s -b'
+alias gsc 'git show --oneline --name-only'
+alias gsd 'git diff --name-status'
+alias gsf 'git diff-tree --no-commit-id --name-only -r'
+alias gsr 'git remote show origin'
+alias gsm 'git submodule status'
+alias gsu 'git log origin/`git name-rev --name-only HEAD`..`git name-rev --name-only HEAD`'
+
+#diff
+alias gd 'git diff'
+alias gdc 'git diff --cached'
+alias gdt 'git difftool'
+
+#help
+alias gh 'git help'
+
