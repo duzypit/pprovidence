@@ -43,7 +43,9 @@ int main(){
             return 0;
         } else {
             cparser.parse(command);
-            master.dispatch(cparser.req_struct());
+            if(cparser.valid()){
+                master.dispatch(cparser.req_struct());
+            }
         }
 
     }
