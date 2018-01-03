@@ -18,9 +18,8 @@ class Beholder{
     ~Beholder(){
         _stop_thread = true;
         if(_thread.joinable()) {
-            std::cout << "Beholder.join()" << std::endl;
             _thread.join();
-            std::cout << "Beholder joinde!" << std::endl;
+            std::cout << "Beholder joined!" << std::endl;
         }
     }
 
