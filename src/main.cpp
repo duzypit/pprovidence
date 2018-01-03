@@ -13,20 +13,31 @@
 #include "../include/scribe.cpp"
 #include "../lib/practicalSocket.h"
 #include "../include/protocolMinion.hpp"
+#include "../include/commandLoader.hpp"
 
-int main(){
-    //google
-    //Request r1 = {std::string("172.217.16.3"), std::string("tp@gmail.com"), 3, 80};
-    //std::cout << "Create Master" << std::endl;
-    //Beholder Master(r1);
-    //Request r2 = {std::string("127.0.0.123"), std::string("tp@gmail.com"), 5, 125};
-    //Master.add(r2);
+int main(int argc, char* argv[]){
+
     Overseer master("log.txt");
-    std::string command;
+    commandParser cparser;
 
     std::cout << std::string(80, '\n');
+
+    if(argc >= 2){
+        //load hosts file
+        CommandLoader hl(argv[1]);
+        std::vector<std::string> requests;
+        requests = hl.requestsVector();
+        for(auto r : requests){
+            cparser.parse(r);
+            if(cparser.valid()){
+                master.dispatch(cparser.req_struct());
+            }
+        }
+    }
+
+    std::string command;
+
     std::cout << "Type a command (q - quit, ? - help)." << std::endl;
-    commandParser cparser;
     for(;;){
         std::cout << ">:";
         command.clear();
