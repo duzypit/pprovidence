@@ -19,7 +19,6 @@ public:
     ~Scribe(){
         _stop_thread = true;
         if (_thread.joinable()) {
-            std::cout << "Scribe.join()" << std::endl;
             _thread.join();
             std::cout << "Scribe joined!" << std::endl;
         }
