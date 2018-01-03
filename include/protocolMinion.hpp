@@ -32,7 +32,8 @@ public:
             buffer[1023] = '\0';
 
             if(recievedDataSize > 0){
-                _msg = "Connection OK.";
+                _msg = "Connection OK. ";
+                _msg += removeLastChar(std::string(buffer));
             } else {
                 _msg = "Connection established, recieved 0 bytes.";
             }
@@ -49,6 +50,21 @@ public:
 private:
     std::string _msg;
     std::string _requestCommand;
+
+    std::string removeLF(std::string s){
+        if(!s.empty()){
+            s.erase(std::remove(s.begin(), s.end(), '\r'), s.end());
+        }
+
+        return s;
+    }
+
+    std::string removeLastChar(std::string s) {
+        if (!s.empty()){
+            s.pop_back();
+        }
+        return s;
+    }
 };
 
 #endif
