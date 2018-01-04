@@ -46,9 +46,14 @@ int main(int argc, char* argv[]){
         if(command == "?"){
             std::cout << std::endl;
             std::cout << "Commands:" << std::endl;
-            std::cout << "\ta <adress> <20|22|25|80|110> <interval> <email> - add adress to watch, interval in seconds" << std::endl;
+            std::cout << "\ta <adress> <20|21|22|25|80|110|995> <interval> <email> - add adress to watch, interval in seconds" << std::endl;
             std::cout << "\tl - list all current jobs with id's" << std::endl;
             std::cout << "\ts <job_id> - stop job" <<std::endl;
+            std::cout << "\te <e-mail> - set default email" <<std::endl;
+            std::cout << "\th - hold all jobs" <<std::endl;
+            std::cout << "\tr - run again all jobs" <<std::endl;
+
+
             std::cout << std::endl;
         } else if(command == "q") {
             return 0;
