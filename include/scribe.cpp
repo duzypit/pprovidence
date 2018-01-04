@@ -33,6 +33,7 @@ public:
     void stop(){
         _stop_thread = true;
     }
+
 private:
 
     std::ofstream _file;

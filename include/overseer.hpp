@@ -14,7 +14,7 @@
 
 class Overseer{
 public:
-	Overseer(std::string filename) : _scribe(filename) {
+	Overseer(std::string filename) : _threads(20), _scribe(filename) {
         _scribe.start(std::ref(_msgQueue), std::ref(_condVar), std::ref(_mutex));
     };
 
@@ -58,7 +58,7 @@ public:
             std::setw(8) << std::left <<
             "port" <<
             std::setw(15) << std::left <<
-            "interval (s)" <<
+            "interval (ts)" <<
             std::setw(20) << std::left <<
             "e-mail " <<
             std::setw(20) << std::left <<
