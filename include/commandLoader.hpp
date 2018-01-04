@@ -1,4 +1,4 @@
-#ifndef __COMMAND_PARSER_HPP__LOADER_HPP__
+#ifndef __COMMAND_LOADER_HPP__
 #define __COMMAND_LOADER_HPP__
 
 #include <vector>
@@ -24,9 +24,6 @@ private:
     void dispatchFile(const std::string& filename){
         std::fstream ifs(filename);
         if (ifs) {
-         /*   std::copy(std::istream_iterator<std::string>(ifs),
-                    std::istream_iterator<std::string>(),
-                    std::back_inserter(_reqVec));*/
             std::string line;
             while(std::getline(ifs, line)){
                 _reqVec.push_back(line);

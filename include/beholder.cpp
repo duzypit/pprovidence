@@ -7,6 +7,7 @@
 #include <deque>
 #include <ctime>
 #include <string>
+#include <condition_variable>
 
 #include "../include/datatypes.hpp"
 #include "../lib/practicalSocket.h"
@@ -26,9 +27,9 @@ class Beholder{
     Beholder(const Beholder&) = delete;
     Beholder(Beholder &&) = delete;
 
-    void start(std::deque<Report>& overseerMsgQueue,/* std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex){
+    void start(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar, std::mutex& overseerMutex){
         _stop_thread = false;
-        _thread = std::thread(&Beholder::observe, this, std::ref(overseerMsgQueue), /*std::ref(overseerCondVar),*/ std::ref(overseerMutex));
+        _thread = std::thread(&Beholder::observe, this, std::ref(overseerMsgQueue), std::ref(overseerCondVar), std::ref(overseerMutex));
     }
 
     void stop(){
@@ -63,37 +64,18 @@ class Beholder{
 
         Request _r;
 
-        void observe(std::deque<Report>& overseerMsgQueue, /*std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex){
+        void observe(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar, std::mutex& overseerMutex){
             std::string protocolRequest("GET /\n");
-//            char buffer[1024];
             while(!_stop_thread){
                 Report error(_r);
                 std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
                 ProtocolMinion socket(_r.ip, static_cast<int>(_r.port));
                 error.msg = socket.result();
-/*
-                try{
-                    TCPSocket sock(_r.ip, static_cast<int>(_r.port));
-
-                    sock.send(protocolRequest.c_str(), protocolRequest.length());
-                    std::size_t recievedDataSize = 0;
-                    recievedDataSize = sock.recv(buffer, 1023);
-                    buffer[1023] = '\0';
-
-                    if(recievedDataSize > 0){
-                        error.msg = "Connection OK.";
-                    } else {
-                        error.msg = "Connection established, recieved 0 bytes.";
-                    }
-                } catch (const SocketException& e) {
-                    error.msg = e.what();
-                }
-*/
                 error.event_time = std::time(nullptr);
                 std::unique_lock<std::mutex> lock(overseerMutex);
                 overseerMsgQueue.push_back(error);
                 lock.unlock();
-                //overseerCondVar.notify_one();
+                overseerCondVar.notify_one();
             }
         }
 };
