@@ -18,8 +18,6 @@ public:
 
     ~Scribe(){
         _stop_thread = true;
-        //_overseerCondVarPtr -> notify_one();
-
         if (_thread.joinable()) {
             _thread.join();
             std::cout << "Scribe joined!" << std::endl;
@@ -32,9 +30,15 @@ public:
         _thread = std::thread(&Scribe::observe, this, std::ref(overseerMsgQueue), std::ref(overseerCondVar), std::ref(overseerMutex));
     }
 
+    void stop(){
+        _stop_thread = true;
+    }
 private:
+
     std::ofstream _file;
+
     std::thread _thread;
+
     bool _stop_thread;
 
     void save(const Report& e){
@@ -56,12 +60,13 @@ private:
         return msg;
     }
 
+
+
     void observe(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar, std::mutex& overseerMutex){
-        //_overseerCondVarPtr = std::make_shared<std::condition_variable>(overseerCondVar);
         Report e;
         while(!_stop_thread){
             std::unique_lock<std::mutex> lock(overseerMutex);
-            overseerCondVar.wait(lock);
+            overseerCondVar.wait(lock, [this](){ return !_stop_thread; });
             if(!overseerMsgQueue.empty()){
                 e = overseerMsgQueue[0];
                 overseerMsgQueue.pop_front();
@@ -70,7 +75,6 @@ private:
             }
         }
     }
-    std::shared_ptr<std::condition_variable> _overseerCondVarPtr;
 };
 
 #endif
