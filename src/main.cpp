@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
     Overseer master("log.txt");
     commandParser cparser;
 
-    std::cout << std::string(80, '\n');
+   // std::cout << std::string(80, '\n');
 
     if(argc >= 2){
         //load hosts file
