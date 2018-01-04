@@ -58,7 +58,8 @@ class Beholder{
 
     private:
         std::thread _thread;
-
+        std::mutex _beholderMutex;
+        std::condition_variable _beholderCondVar;
         //ture - stopped, false - working
         bool _stop_thread;
 
@@ -68,14 +69,19 @@ class Beholder{
             std::string protocolRequest("GET /\n");
             while(!_stop_thread){
                 Report error(_r);
-                std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
-                ProtocolMinion socket(_r.ip, static_cast<int>(_r.port));
-                error.msg = socket.result();
-                error.event_time = std::time(nullptr);
-                std::unique_lock<std::mutex> lock(overseerMutex);
-                overseerMsgQueue.push_back(error);
-                lock.unlock();
-                overseerCondVar.notify_one();
+               // std::unique_lock<std::mutex> beholderLock(_beholderMutex);
+               // _beholderCondVar.wait_for(beholderLock, std::chrono::duration<int>(_r.interval), [this](){return _stop_thread;});
+                std::cout << "beholder" << std::endl;
+                //std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
+                if(!_stop_thread){
+                    ProtocolMinion socket(_r.ip, static_cast<int>(_r.port));
+                    error.msg = socket.result();
+                    error.event_time = std::time(nullptr);
+                    std::unique_lock<std::mutex> lock(overseerMutex);
+                    overseerMsgQueue.push_back(error);
+                    lock.unlock();
+                    overseerCondVar.notify_one();
+                }
             }
         }
 };
