@@ -15,7 +15,6 @@
 class Overseer{
 public:
 	Overseer(std::string filename) : _scribe(filename) {
-
         _scribe.start(std::ref(_msgQueue), std::ref(_condVar), std::ref(_mutex));
     };
 
