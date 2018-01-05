@@ -32,10 +32,12 @@ public:
 
             sock.setSendTimeout(timeoutSec, timeoutUsec);
             sock.connect(address, port);
+
             if (!_requestCommand.empty())
             {
                 sock.send(_requestCommand.c_str(), _requestCommand.length());
             }
+
             std::size_t recievedDataSize = 0;
             recievedDataSize = sock.recv(buffer, 1023);
             buffer[1023] = '\0';
@@ -43,7 +45,8 @@ public:
             if(recievedDataSize > 0)
             {
                 _msg = "Connection OK. ";
-                _msg += removeCRLF(std::string(buffer));
+                //_msg += removeCRLF(std::string(buffer));
+                _msg += std::string("Recieved ") + std::to_string(recievedDataSize) + std::string(" bytes.");
             } else
             {
                 _msg = "Connection established, recieved 0 bytes.";
