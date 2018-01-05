@@ -9,31 +9,37 @@
 #include <iostream>
 
 
-class CommandLoader{
+class CommandLoader
+{
 public:
-    CommandLoader(const std::string& filename){
+    CommandLoader(const std::string& filename)
+    {
         dispatchFile(filename);
     }
 
     ~CommandLoader(){}
 
-    std::vector<std::string> requestsVector(){
+    std::vector<std::string> requestsVector()
+    {
         return _reqVec;
     }
+
 private:
-    void dispatchFile(const std::string& filename){
+    void dispatchFile(const std::string& filename)
+    {
         std::fstream ifs(filename);
-        if (ifs) {
+        if (ifs)
+        {
             std::string line;
-            while(std::getline(ifs, line)){
+            while(std::getline(ifs, line))
+            {
                 _reqVec.push_back(line);
             }
         }
-        else {
+        else
+        {
             std::cout << "Couldn't open " << filename << " for reading" << std::endl;
         }
-
-
     }
     std::vector<std::string> _reqVec;
 };

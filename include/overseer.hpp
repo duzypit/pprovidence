@@ -9,8 +9,8 @@
 #include <condition_variable>
 
 #include "../include/datatypes.hpp"
-#include "../include/beholder.cpp"
-#include "../include/scribe.cpp"
+#include "../include/beholder.hpp"
+#include "../include/scribe.hpp"
 
 class Overseer
 {

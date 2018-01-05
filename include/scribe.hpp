@@ -20,7 +20,7 @@ public:
     ~Scribe()
     {
         _stop_thread = true;
-        _cv.notify_one();
+        _cv.notify_all();
         if (_thread.joinable())
         {
             _thread.join();
@@ -29,10 +29,10 @@ public:
         _file.close();
     }
 
-    void start(std::deque<Report>& overseerMsgQueue,/* std::condition_variable& overseerCondVar,*/  std::mutex& overseerMutex)
+    void start(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex)
     {
         _stop_thread = false;
-        _thread = std::thread(&Scribe::observe, this, std::ref(overseerMsgQueue),/* std::ref(overseerCondVar),*/ std::ref(overseerMutex));
+        _thread = std::thread(&Scribe::observe, this, std::ref(overseerMsgQueue), std::ref(overseerMutex));
     }
 
     void stop()
@@ -70,16 +70,18 @@ private:
 
 
 
-    void observe(std::deque<Report>& overseerMsgQueue, /*std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex)
+    void observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex)
     {
         Report e;
         while(!_stop_thread){
-            std::unique_lock<std::mutex> lock(overseerMutex);
-            _cv.wait(lock, [&](){ return (!_stop_thread != !overseerMsgQueue.empty()); });
-            if(!overseerMsgQueue.empty()){
+           // _cv.wait(lock, [&](){ return (_stop_thread || !overseerMsgQueue.empty()); });
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+
+            while(!overseerMsgQueue.empty() && !_stop_thread){
                 e = overseerMsgQueue[0];
+
+                std::unique_lock<std::mutex> lock(overseerMutex);
                 overseerMsgQueue.pop_front();
-                lock.unlock();
                 save(e);
             }
         }

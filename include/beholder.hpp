@@ -1,5 +1,5 @@
-#ifndef __BEHOLDER_CPP__
-#define __BEHOLDER_CPP__
+#ifndef __BEHOLDER_HPP__
+#define __BEHOLDER_HPP__
 
 #include <thread>
 #include <iostream>
@@ -22,7 +22,7 @@ class Beholder
     {
         _terminate = true;
         _stop_thread = true;
-        _cv.notify_one();
+        _cv.notify_all();
 
         if(_thread.joinable())
         {
@@ -34,10 +34,10 @@ class Beholder
     Beholder(const Beholder&) = delete;
     Beholder(Beholder &&) = delete;
 
-    void start(std::deque<Report>& overseerMsgQueue,/* std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex)
+    void start(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex)
     {
         _stop_thread = false;
-        _thread = std::thread(&Beholder::observe, this, std::ref(overseerMsgQueue),/* std::ref(overseerCondVar),*/ std::ref(overseerMutex));
+        _thread = std::thread(&Beholder::observe, this, std::ref(overseerMsgQueue), std::ref(overseerMutex));
     }
 
     void stop()
@@ -82,26 +82,21 @@ class Beholder
 
         Request _r;
 
-        void observe(std::deque<Report>& overseerMsgQueue, /*std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex){
+        void observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex){
             while(!_stop_thread)
             {
 
                 Report error(_r);
-               //std::this_thread::sleep_for(std::chrono::seconds(_r.interval));
                 std::unique_lock<std::mutex> beholderLock(_m);
                 _cv.wait_for(beholderLock, std::chrono::duration<int>(_r.interval), [&]{ return _terminate; });
                 if(!_terminate)
                 {
-//                    std::cout << "job done!" << std::endl;
 
                     ProtocolMinion socket(_r.ip, static_cast<int>(_r.port));
                     error.msg = socket.result();
                     error.event_time = std::time(nullptr);
                     std::unique_lock<std::mutex> lock(overseerMutex);
                     overseerMsgQueue.push_back(error);
-                    lock.unlock();
-                    _cv.notify_one();
-
                 }
             }
         }

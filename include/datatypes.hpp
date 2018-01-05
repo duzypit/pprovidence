@@ -3,7 +3,8 @@
 #include <string>
 #include <chrono>
 
-enum class Protocol {
+enum class Protocol
+{
     ftp = 20,
     ssh = 22,
     smtp = 25,
@@ -11,7 +12,8 @@ enum class Protocol {
     pop3 = 110
 };
 
-struct Request{
+struct Request
+{
     std::string ip;
     std::string email;
     int interval;
@@ -21,10 +23,12 @@ struct Request{
     bool valid;
 };
 
-struct Report : public Request {
+struct Report : public Request
+{
     Report(){}
 
-    Report(const Request& r) {
+    Report(const Request& r)
+    {
         ip = r.ip;
         email = r.email;
         interval = r.interval;
