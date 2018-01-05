@@ -92,7 +92,7 @@ class Beholder
                 if(!_terminate)
                 {
 
-                    ProtocolMinion socket(_r.ip, static_cast<int>(_r.port));
+                    ProtocolMinion socket(_r.ip, _r.port);
                     error.msg = socket.result();
                     error.event_time = std::time(nullptr);
                     std::unique_lock<std::mutex> lock(overseerMutex);
