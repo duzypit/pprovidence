@@ -12,41 +12,48 @@
 
 #include "../include/datatypes.hpp"
 
-class Scribe{
+class Scribe
+{
 public:
     Scribe(const std::string& file) : _file(file.c_str(), std::ios::ate) {}
 
-    ~Scribe(){
+    ~Scribe()
+    {
         _stop_thread = true;
-        if (_thread.joinable()) {
+        _cv.notify_one();
+        if (_thread.joinable())
+        {
             _thread.join();
             std::cout << "Scribe joined!" << std::endl;
         }
         _file.close();
     }
 
-    void start(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar,  std::mutex& overseerMutex){
+    void start(std::deque<Report>& overseerMsgQueue,/* std::condition_variable& overseerCondVar,*/  std::mutex& overseerMutex)
+    {
         _stop_thread = false;
-        _thread = std::thread(&Scribe::observe, this, std::ref(overseerMsgQueue), std::ref(overseerCondVar), std::ref(overseerMutex));
+        _thread = std::thread(&Scribe::observe, this, std::ref(overseerMsgQueue),/* std::ref(overseerCondVar),*/ std::ref(overseerMutex));
     }
 
-    void stop(){
+    void stop()
+    {
         _stop_thread = true;
     }
 
 private:
 
     std::ofstream _file;
-
     std::thread _thread;
-
     bool _stop_thread;
+    std::condition_variable _cv;
 
-    void save(const Report& e){
+    void save(const Report& e)
+    {
         _file << formatMsg(e) << std::endl;
     }
 
-    std::string formatMsg(const Report& e){
+    std::string formatMsg(const Report& e)
+    {
         std::string msg;
                 std::ostringstream oss;
                 std::tm tm = *std::localtime(&e.event_time);
@@ -63,11 +70,12 @@ private:
 
 
 
-    void observe(std::deque<Report>& overseerMsgQueue, std::condition_variable& overseerCondVar, std::mutex& overseerMutex){
+    void observe(std::deque<Report>& overseerMsgQueue, /*std::condition_variable& overseerCondVar,*/ std::mutex& overseerMutex)
+    {
         Report e;
         while(!_stop_thread){
             std::unique_lock<std::mutex> lock(overseerMutex);
-            overseerCondVar.wait(lock, [this](){ return !_stop_thread; });
+            _cv.wait(lock, [&](){ return (!_stop_thread != !overseerMsgQueue.empty()); });
             if(!overseerMsgQueue.empty()){
                 e = overseerMsgQueue[0];
                 overseerMsgQueue.pop_front();
