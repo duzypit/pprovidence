@@ -17,7 +17,8 @@ struct Request
     std::string ip;
     std::string email;
     int interval;
-    Protocol port;
+    //Protocol port;
+    int port;
     std::size_t job_id;
     char command;
     bool valid;
