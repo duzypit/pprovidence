@@ -27,8 +27,9 @@ public:
                 _data.ip = splittedSource[1];
                 _data.email = splittedSource[4];
                 _data.interval = atoi(splittedSource[3].c_str());
-
+                _data.port = atoi(splittedSource[2].c_str());
                 //ftp|ssh|smtp|http|pop3 ;
+                /*
                 switch(atoi(splittedSource[2].c_str()))
                 {
                     case 20:
@@ -53,7 +54,7 @@ public:
                             _data.port = Protocol::http;
                         break;
                 }
-
+*/
             } else
             {
                 _data.valid = false;
