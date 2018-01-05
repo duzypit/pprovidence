@@ -50,6 +50,7 @@ int main(int argc, char* argv[]){
             std::cout << "\ts <job_id> - stop job" <<std::endl;
             std::cout << std::endl;
         } else if(command == "q") {
+            std::cout << "Bye!" << std::endl;
             return 0;
         } else {
             cparser.parse(command);
