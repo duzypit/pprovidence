@@ -69,7 +69,7 @@ public:
 
         //22l 2.0.0 closing connectioni
         msg = openSSL.read();
-        if (validReturnMsg(221, msg))
+        if (!validReturnMsg(221, msg))
         {
             SMTPReply(221, msg);
         }
