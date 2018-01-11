@@ -12,7 +12,6 @@
 #include "datatypes.hpp"
 #include "../lib/practicalSocket.h"
 #include "protocolMinion.hpp"
-#include "timerKiller.hpp"
 class Beholder
 {
     public:
