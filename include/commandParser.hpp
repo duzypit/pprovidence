@@ -28,33 +28,6 @@ public:
                 _data.email = splittedSource[4];
                 _data.interval = atoi(splittedSource[3].c_str());
                 _data.port = atoi(splittedSource[2].c_str());
-                //ftp|ssh|smtp|http|pop3 ;
-                /*
-                switch(atoi(splittedSource[2].c_str()))
-                {
-                    case 20:
-                            _data.port = Protocol::ftp;
-                        break;
-                    case 21:
-                            _data.port = Protocol::ftp;
-                        break;
-                    case 22:
-                            _data.port = Protocol::ssh;
-                        break;
-                    case 25:
-                            _data.port = Protocol::smtp;
-                        break;
-                     case 110:
-                            _data.port = Protocol::pop3;
-                        break;
-                    case 995:
-                            _data.port = Protocol::pop3;
-                        break;
-                    default:
-                            _data.port = Protocol::http;
-                        break;
-                }
-*/
             } else
             {
                 _data.valid = false;
