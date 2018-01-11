@@ -1,5 +1,4 @@
-/*
- *   C++ sockets on Unix and Windows
+/* sockets on Unix and Windows
  *   Copyright (C) 2002
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -19,7 +18,7 @@
 
 #include "practicalSocket.h"
 #include <cstring>
-
+#include <functional>
 
 #ifdef WIN32
   #include <winsock.h>         // For socket(), connect(), send(), and recv()
@@ -173,6 +172,9 @@ void Socket::setRecieveTimeout(const int &sec, const int &usec) throw(SocketExce
         throw SocketException("Set of recieve timeout failed (setsockopt())", true);
 }
 
+int Socket::nativeHandle(){
+    return std::ref(sockDesc);
+}
 
 void Socket::cleanUp() throw(SocketException) {
   #ifdef WIN32

@@ -1,5 +1,4 @@
-/*
- *   C++ sockets on Unix and Windows
+/* sockets on Unix and Windows
  *   Copyright (C) 2002
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -97,6 +96,8 @@ public:
     unsigned short localPort = 0) throw(SocketException);
 
   void setSendTimeout(const int &sec, const int &usec) throw(SocketException);
+
+  int nativeHandle();
 
   void setRecieveTimeout(const int &sec, const int &usec) throw(SocketException);
 
