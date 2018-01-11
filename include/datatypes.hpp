@@ -24,6 +24,13 @@ struct Request
     bool valid;
 };
 
+struct GmailCreditenials
+{
+    std::string uname;
+    std::string password;
+    bool valid = false;
+};
+
 struct Report : public Request
 {
     Report(){}
@@ -39,8 +46,8 @@ struct Report : public Request
     }
 
     ~Report(){}
-
     std::time_t event_time;
-    std::string msg;
+    //first notify, second msg
+    std::pair<bool, std::string> msg;
 };
 #endif
