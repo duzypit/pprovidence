@@ -13,13 +13,17 @@
 #include "../lib/practicalSocket.h"
 #include "../include/protocolMinion.hpp"
 #include "../include/commandLoader.hpp"
+#include "../include/passwd.cpp"
+#include "../include/smtpSender.cpp"
+
+
 
 int main(int argc, char* argv[])
 {
 
     Overseer master("log.txt");
     commandParser cparser;
-
+    GmailCreditenials gmailCreditenials;
    // std::cout << std::string(80, '\n');
 
     if(argc >= 2)
@@ -54,17 +58,53 @@ int main(int argc, char* argv[])
             std::cout << "\ta <adress> <20|21|22|25|80|110|995> <interval> <email> - add adress to watch, interval in seconds" << std::endl;
             std::cout << "\tl - list all current jobs with id's" << std::endl;
             std::cout << "\ts <job_id> - stop job" <<std::endl;
+            std::cout << "\tc - fill creditenials to Gmail accout for email notification sending" << std::endl;
             std::cout << std::endl;
-        } else if(command == "q")
+        }
+        else if(command == "c")
+        {
+            Passwd p;
+            SMTPSender sender;
+
+            std::cout << "Gmail username >: ";
+            std::cin >> gmailCreditenials.uname;
+
+            std::cout << "Gmail password >: ";
+            gmailCreditenials.password = p.getPassword();
+            std::cout << std::endl;
+
+            if (sender.verifyCreditenials(gmailCreditenials.uname, gmailCreditenials.password))
+            {
+                gmailCreditenials.valid = true;
+                master.setUpMailer(gmailCreditenials);
+                std::cout << "Gmail creditenials valid" << std::endl;
+
+            }
+            else
+            {
+                gmailCreditenials.valid = false;
+                gmailCreditenials.uname.clear();
+                gmailCreditenials.password.clear();
+                std::cout<<"Gmail creditenials invalid!" << std::endl;
+            }
+
+            //command.clear();
+            //break;
+        }
+        else if(command == "q")
         {
             std::cout << "Bye!" << std::endl;
-            return 0;
+            //return 0;
+            break;
         } else
         {
-            cparser.parse(command);
-            if(cparser.valid())
+            if(!command.empty())
             {
-                master.dispatch(cparser.req_struct());
+                cparser.parse(command);
+                if(cparser.valid())
+                {
+                    master.dispatch(cparser.req_struct());
+                }
             }
         }
 
