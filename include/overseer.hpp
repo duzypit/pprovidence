@@ -98,6 +98,10 @@ public:
         }
     }
 
+    void setUpMailer(GmailCreditenials& creditenials)
+    {
+        _scribe.setUpMailer(creditenials);
+    }
 private:
     std::vector<std::shared_ptr<Beholder>> _threads;
     std::deque<Report> _msgQueue;

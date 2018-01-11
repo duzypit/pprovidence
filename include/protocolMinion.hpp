@@ -44,26 +44,29 @@ public:
 
             if(recievedDataSize > 0)
             {
-                _msg = "Connection OK. ";
+                _msg.first = false;
+                _msg.second = "Connection OK. ";
                 //_msg += removeCRLF(std::string(buffer));
-                _msg += std::string("Recieved ") + std::to_string(recievedDataSize) + std::string(" bytes.");
+                _msg.second += std::string("Recieved ") + std::to_string(recievedDataSize) + std::string(" bytes.");
             } else
             {
-                _msg = "Connection established, recieved 0 bytes.";
+                _msg.first = false;
+                _msg.second = "Connection established, recieved 0 bytes.";
             }
 
         } catch (const SocketException& e) {
-            _msg = e.what();
+            _msg.first = true;
+            _msg.second = e.what();
         }
     }
 
     ~ProtocolMinion(){}
 
-    std::string result(){
+    std::pair<bool, std::string> result(){
         return _msg;
     }
 private:
-    std::string _msg;
+    std::pair<bool, std::string> _msg;
     std::string _requestCommand;
 
     std::string removeCRLF(std::string s){

@@ -11,6 +11,7 @@
 #include <iomanip> //std::put_time
 
 #include "../include/datatypes.hpp"
+#include "../include/smtpSender.cpp"
 
 class Scribe
 {
@@ -40,12 +41,18 @@ public:
         _stop_thread = true;
     }
 
+    void setUpMailer(GmailCreditenials creditenials){
+        _creditenials = creditenials;
+    }
+
 private:
 
     std::ofstream _file;
     std::thread _thread;
     bool _stop_thread;
     std::condition_variable _cv;
+
+    GmailCreditenials _creditenials;
 
     void save(const Report& e)
     {
@@ -63,7 +70,7 @@ private:
                 oss << " ";
                 oss << std::to_string(static_cast<int>(e.port));
                 oss << " ";
-                oss << e.msg;
+                oss << e.msg.second;
                 msg = oss.str();
         return msg;
     }
@@ -82,7 +89,24 @@ private:
 
                 std::unique_lock<std::mutex> lock(overseerMutex);
                 overseerMsgQueue.pop_front();
+                lock.unlock();
                 save(e);
+                //send email
+                if(e.msg.first == true && _creditenials.valid == true)
+                {
+                    SMTPSender sender;
+                    std::string from = _creditenials.uname + "@gmail.com";
+                    sender.sendSSL (
+                        _creditenials.uname, // userName
+                        _creditenials.password, // password
+                        from, // from
+                        e.email, // to
+                        "Testing Boost STMP", // subject
+                        "This message body" // message
+                    );
+
+                }
+
             }
         }
     }
