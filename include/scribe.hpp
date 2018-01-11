@@ -96,13 +96,14 @@ private:
                 {
                     SMTPSender sender;
                     std::string from = _creditenials.uname + "@gmail.com";
+                    std::string subject = "PProvidence: host " + e.ip + " unreachable";
                     sender.sendSSL (
                         _creditenials.uname, // userName
                         _creditenials.password, // password
                         from, // from
                         e.email, // to
-                        "Testing Boost STMP", // subject
-                        "This message body" // message
+                        subject, // subject
+                        formatMsg(e) // message
                     );
 
                 }
