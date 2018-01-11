@@ -1,7 +1,6 @@
 #ifndef __SOCKET_CPP__
 #define __SOCKET_CPP__
-#include "practicalSocket.h"
-#include "practicalSocket.cpp"
+#include "../lib/practicalSocket.h"
 
 
 class SMTPSocket
