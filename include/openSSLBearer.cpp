@@ -92,6 +92,13 @@ public:
 	{
         // SSL shutdown can be used to shut down the TLS/SSL connection.
         SSL_shutdown(ssl_.get());
+        FIPS_mode_set(0);
+        //ENGINE_cleanup();
+
+//        CONF_modules_unload(1);
+        EVP_cleanup();
+        CRYPTO_cleanup_all_ex_data();
+//        ERR_remove_state();
         ERR_free_strings();
 
     }
