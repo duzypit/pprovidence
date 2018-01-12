@@ -13,8 +13,8 @@
 #include "../lib/practicalSocket.h"
 #include "../include/protocolMinion.hpp"
 #include "../include/commandLoader.hpp"
-#include "../include/passwd.cpp"
-#include "../include/smtpSender.cpp"
+#include "../include/passwd.hpp"
+#include "../include/smtpSender.hpp"
 
 
 
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 {
 
     Overseer master("log.txt");
-    commandParser cparser;
+    CommandParser cparser;
     GmailCreditenials gmailCreditenials;
    // std::cout << std::string(80, '\n');
 
