@@ -2,7 +2,7 @@
 
 ## Wymagania funkcjonalne:
 
-1. Dodanie/usunięcie usługi sieciowej do monitorowania
+1. Dodanie usługi sieciowej do monitorowania, zatrzymanie monitorowania usługi
 2. Monitorowanie wybranych usług http (80, 8080), ssh (22), ftp (20,21), smtp (25), pop3 (110,995), możliwe monitorowanie usług na innych portach
 3. Możliwość konfiguracji dowolnej częstotliwości monitorowania dla usuługi
 4. Historia monitoringu zapisywana do pliku
@@ -14,26 +14,6 @@
 2. Os: Linux (Debian/Ubuntu i pochodne)
 3. Połączenie z internetem
 4. Do kompilacji programu niezbędna jest instalacja pakietu libssl-dev (-lssl -lcrypto)
-
-### Przypadek 5, program jest uruchomiony
-1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
-2. Program wyświetla dostępne komendy
-3. Program przechodzi w stan oczekiwania na kolejne polecenia
-
-### Przypadek 5, program jest uruchomiony
-1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
-2. Program wyświetla dostępne komendy
-3. Program przechodzi w stan oczekiwania na kolejne polecenia
-
-### Przypadek 5, program jest uruchomiony
-1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
-2. Program wyświetla dostępne komendy
-3. Program przechodzi w stan oczekiwania na kolejne polecenia
-
-### Przypadek 5, program jest uruchomiony
-1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
-2. Program wyświetla dostępne komendy
-3. Program przechodzi w stan oczekiwania na kolejne polecenia
 
 ## Przypadki użycia
 
@@ -54,19 +34,19 @@
 7. Po upływie interwału zestawiane jest polaczenie z usługą
 8. Jeżeli usługa działa, wątek jest usypiany na określony czas i program powraca do punktu 7.
 9. Jeśli usługa nie działa, wštek komunikuje się z obiektami:
-      * Postmaster - wysyłana jest wiadomość na wskazany adres,
-      * Scribe - zdarzenie logowane jest do pliku
+      * Scribe - zdarzenie logowane jest do pliku, wysyłane jest powiadomienie przez e-mail
       * Program wraca do punktu 7.
 
 ### Przypadek 3, program jest uruchomiony,  monitoruje wcześniej wprowadzone usługi
 
 1. Użytkownik wydaje polecenie wypisania monitorowanych usług
 2. Program wyświetla identyfikatory (unikatowe w obrębie programu) i dane monitorowanych usług (adres ip, port, interwał, e-mail do powiadamiania)
+3. Użytkownik ma możliwość wydawania kolejnych komend
 
 ### Przypadek 4, program jest uruchomiony, monitoruje wcześniej wprowadzone usługi, użytkownik zna identyfikatory monitorowanych usług
 1. Program umożliwia użytkownikowi podanie identyfikatora monitorowanej usługi do zatrzymania
 2. Użytkownik podaje identyfikator
-3. Program zatrzymuje monitorowanie usługi, wątek jest "joinowany"
+3. Program zatrzymuje monitorowanie usługi, wątek jest zatrzymywany
 
 ### Przypadek 5, program jest uruchomiony
 1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
@@ -78,6 +58,7 @@
 ![diagram sekwencji projek providence](https://github.com/duzypit/pprovidence/blob/master/docs/project_providence_seq_diag.png?raw=true)
 
 ## Ramka danych dla protokołów TCP/IP
+
 
 Datagram TCP
 ![datagram TCP](https://github.com/duzypit/pprovidence/blob/master/docs/tcp_udp_headers.jpg?raw=true)
