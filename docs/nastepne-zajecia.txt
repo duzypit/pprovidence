@@ -1,6 +1,0 @@
-16.12.2017
-- zacząc tworzyć kod, code review u innych
-- diagram baz danych - jeśli ma się bazę danych
-- jeśli nie ma baz danych, a korzystamy z zewnętrznych źródeł opisać api
-- opisać żródła danych - jak wygląda ramka danych - dla protokołów
-- pisać scenariusze - przygotować diagram sekwencji
