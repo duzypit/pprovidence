@@ -5,17 +5,13 @@
 
 class SMTPSocket
 {
-    public:
+public:
 
-    SMTPSocket(const std::string& address, const int& port)
-    {
-        socket_.connect(address, port);
-    }
+    SMTPSocket(const std::string& address, const int& port);
 
-    Socket *GetSocket() { return &socket_; }
+    Socket *GetSocket();
 
-    private:
+private:
     TCPSocket socket_;
 }; // class
-
 #endif
