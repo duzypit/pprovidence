@@ -30,8 +30,8 @@ void Overseer::dispatch(const Request& r)
 
 void Overseer::add(const Request& r)
 {
-auto tmp = std::make_shared<Beholder>(r);
-    tmp -> start(std::ref(_msgQueue), /*std::ref(_condVar),*/ std::ref(_mutex));
+    auto tmp = std::make_shared<Beholder>(r);
+    tmp -> start(std::ref(_msgQueue), std::ref(_mutex));
     _threads.push_back(tmp);
 }
 
