@@ -3,24 +3,49 @@
 ## Wymagania funkcjonalne:
 
 1. Dodanie/usunięcie usługi sieciowej do monitorowania
-2. Monitorowanie wybranych usług http, ssh, ftp, smtp, pop3
+2. Monitorowanie wybranych usług http (80, 8080), ssh (22), ftp (20,21), smtp (25), pop3 (110,995), możliwe monitorowanie usług na innych portach
 3. Możliwość konfiguracji dowolnej częstotliwości monitorowania dla usuługi
 4. Historia monitoringu zapisywana do pliku
 5. Alert mailowy o nie działającej usłudze na dowolny adres
-6. Możliwość ustawienia interwału wysyłania alertu
 
 
 ## Wymagania niefunkcjonalne:
-1. Maszyna - specyfikacja
-2. Os - Linux
-3. Połączenie z siecią
+1. Komputer
+2. Os: Linux (Debian/Ubuntu i pochodne)
+3. Połączenie z internetem
+4. Do kompilacji programu niezbędna jest instalacja pakietu libssl-dev (-lssl -lcrypto)
 
+### Przypadek 5, program jest uruchomiony
+1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
+2. Program wyświetla dostępne komendy
+3. Program przechodzi w stan oczekiwania na kolejne polecenia
+
+### Przypadek 5, program jest uruchomiony
+1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
+2. Program wyświetla dostępne komendy
+3. Program przechodzi w stan oczekiwania na kolejne polecenia
+
+### Przypadek 5, program jest uruchomiony
+1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
+2. Program wyświetla dostępne komendy
+3. Program przechodzi w stan oczekiwania na kolejne polecenia
+
+### Przypadek 5, program jest uruchomiony
+1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
+2. Program wyświetla dostępne komendy
+3. Program przechodzi w stan oczekiwania na kolejne polecenia
 
 ## Przypadki użycia
 
-### Przypadek 1: uruchomienie programu
+### Przypadek 1 : uruchomienie programu, załadowanie konfiguracji z pliku
+1. Użytkownik przygotowuje plik z konfiguracją programu
+2. Program jest uruchamiany, jako parametr z linii poleceń podawany jest plik
+3. Program przetwarza plik, tworzy obiekty i rozpoczyna boserwację zadanych w pliku konfiguracyjnym usług
+4. Użytkownik ma możliwość dodawania kolejnych usuług do obserwacji
 
-1. Użytkownik uruchamia program, tworzone są obiekty Beholder, Postmaster, Scribe.
+### Przypadek 2: uruchomienie programu
+
+1. Użytkownik uruchamia program, tworzone są obiekty Beholder, Scribe.
 2. Program umożliwia użytkownikowi dodanie adresu i portu do obserwacji (usługi) oraz interwału w jakim będzie sprawdzana dostępność usługi
 3. Użytkownik podaje dane wejściowe
 4. Program tworzy obiekt zawierający dane usługi
@@ -33,15 +58,20 @@
       * Scribe - zdarzenie logowane jest do pliku
       * Program wraca do punktu 7.
 
-### Przypadek 2, program jest uruchomiony,  monitoruje wcześniej wprowadzone usługi
+### Przypadek 3, program jest uruchomiony,  monitoruje wcześniej wprowadzone usługi
 
 1. Użytkownik wydaje polecenie wypisania monitorowanych usług
 2. Program wyświetla identyfikatory (unikatowe w obrębie programu) i dane monitorowanych usług (adres ip, port, interwał, e-mail do powiadamiania)
 
-### Przypadek 3, program jest uruchomiony, monitoruje wcześniej wprowadzone usługi, użytkownik zna identyfikatory monitorowanych usług
+### Przypadek 4, program jest uruchomiony, monitoruje wcześniej wprowadzone usługi, użytkownik zna identyfikatory monitorowanych usług
 1. Program umożliwia użytkownikowi podanie identyfikatora monitorowanej usługi do zatrzymania
 2. Użytkownik podaje identyfikator
 3. Program zatrzymuje monitorowanie usługi, wątek jest "joinowany"
+
+### Przypadek 5, program jest uruchomiony
+1. Użytkownik wydaje polecenie odpowiedzialen za wyświetlenie wewnętrznej pomocy
+2. Program wyświetla dostępne komendy
+3. Program przechodzi w stan oczekiwania na kolejne polecenia
 
 ## Diagram sekwencji
 
@@ -54,7 +84,3 @@ Datagram TCP
 
 Połączenie klient - serwer
 ![klient - serwer](https://github.com/duzypit/pprovidence/blob/master/docs/TCP_IP_socket_diagram.png?raw=true)
-
-
-
-
