@@ -37,8 +37,16 @@ void Overseer::add(const Request& r)
 
 void Overseer::remove(std::size_t id)
 {
-    if(_threads[id] -> stopped() == false)
-        _threads[id] -> stop();
+    if( id <= _threads.size())
+    {
+        if(_threads[id] -> stopped() == false)
+            _threads[id] -> stop();
+    }
+    else
+    {
+        std::cout << "JOb id out of range! Aborted" << std::endl;
+    }
+
 }
 
 void Overseer::list_jobs()
@@ -51,9 +59,9 @@ void Overseer::list_jobs()
         "ip" <<
         std::setw(8) << std::left <<
         "port" <<
-        std::setw(15) << std::left <<
-        "interval (ts)" <<
         std::setw(20) << std::left <<
+        "interval (seconds)" <<
+        std::setw(30) << std::left <<
         "e-mail " <<
         std::setw(20) << std::left <<
         "sleeping/working" <<
@@ -68,9 +76,9 @@ void Overseer::list_jobs()
             b->ip() <<
             std::setw(8) << std::left <<
             b->port() <<
-            std::setw(15) << std::left <<
-            b->interval() <<
             std::setw(20) << std::left <<
+            b->interval() <<
+            std::setw(30) << std::left <<
             b->email() <<
             std::setw(20) << std::left <<
             (b->stopped() ? "sleeping" : "working") <<
