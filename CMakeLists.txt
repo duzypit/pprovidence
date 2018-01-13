@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(pprovidence)
 
-set (CMAKE_CXX_STANDARD 14)
-
+#set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++14")
 #headers
 include_directories(include)
 include_directories(lib)
