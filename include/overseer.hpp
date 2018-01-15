@@ -23,9 +23,11 @@ public:
 
     void add(const Request& r);
 
-    void remove(std::size_t id);
+    void stop(std::size_t id);
 
-    void list_jobs();
+    void run(std::size_t id);
+
+    void listJobs();
 
     void setUpMailer(GmailCreditenials& creditenials);
 

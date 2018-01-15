@@ -28,6 +28,8 @@ public:
 
     void stop();
 
+    void run();
+
     std::string ip();
 
     int port();
