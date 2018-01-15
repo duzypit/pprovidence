@@ -11,7 +11,6 @@ CommandParser& CommandParser::parse(const std::string& source)
     {
         if(splittedSource.size() == 5)
         {
-
             _data.ip = splittedSource[1];
             _data.email = splittedSource[4];
             _data.interval = atoi(splittedSource[3].c_str());
@@ -33,6 +32,17 @@ CommandParser& CommandParser::parse(const std::string& source)
             _data.valid = false;
             std::cout << "commandParser: too few args for stop command. Aborted." << std::endl;
         }
+    } else if(_data.command == 'r')
+    {
+        if(splittedSource.size() >= 2)
+        {
+            _data.job_id = atoi(splittedSource[1].c_str());
+        } else
+        {
+            _data.valid = false;
+            std::cout << "commandParser: too few args for run command. Aborted." << std::endl;
+        }
+
     }
 
     return *this;
