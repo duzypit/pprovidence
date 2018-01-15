@@ -26,6 +26,13 @@ void Beholder::stop()
     _stop_thread = true;
 }
 
+void Beholder::run()
+{
+    _stop_thread = false;
+    std::unique_lock<std::mutex> beholderLock(_m);
+    beholderLock.unlock();
+}
+
 std::string Beholder::ip()
 {
     return _r.ip;
@@ -52,15 +59,13 @@ bool Beholder::stopped()
 }
 
 void Beholder::observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex){
-    while(!_stop_thread)
+    while(!_terminate)
     {
-
         Report error(_r);
         std::unique_lock<std::mutex> beholderLock(_m);
         _cv.wait_for(beholderLock, std::chrono::duration<int>(_r.interval), [&]{ return _terminate; });
-        if(!_terminate)
+        if(!_terminate && !_stop_thread)
         {
-
             ProtocolMinion socket(_r.ip, _r.port);
             error.msg = socket.result();
             error.event_time = std::time(nullptr);
@@ -68,4 +73,20 @@ void Beholder::observe(std::deque<Report>& overseerMsgQueue, std::mutex& oversee
             overseerMsgQueue.push_back(error);
         }
     }
+/*
+    while(!_terminate)
+    {
+        Report error(_r);
+        std::unique_lock<std::mutex> beholderLock(_m);
+        _cv.wait_for(beholderLock, std::chrono::duration<int>(_r.interval), [&]{ return !_stop_thread; });
+        if(!_terminate && !_stop_thread)
+        {
+            ProtocolMinion socket(_r.ip, _r.port);
+            error.msg = socket.result();
+            error.event_time = std::time(nullptr);
+            std::unique_lock<std::mutex> lock(overseerMutex);
+            overseerMsgQueue.push_back(error);
+        }
+    }
+*/
 }

@@ -17,12 +17,14 @@ void Overseer::dispatch(const Request& r)
             add(r);
             break;
         case 'l':
-            list_jobs();
+            listJobs();
             break;
         case 's':
-            remove(r.job_id);
+            stop(r.job_id);
             break;
-
+        case 'r':
+            run(r.job_id);
+            break;
         default:
             std::cout << "Overseer: Unknown command! Aborted." << std::endl;
     }
@@ -35,7 +37,7 @@ void Overseer::add(const Request& r)
     _threads.push_back(tmp);
 }
 
-void Overseer::remove(std::size_t id)
+void Overseer::stop(std::size_t id)
 {
     if( id <= _threads.size())
     {
@@ -44,12 +46,26 @@ void Overseer::remove(std::size_t id)
     }
     else
     {
-        std::cout << "JOb id out of range! Aborted" << std::endl;
+        std::cout << "Job id out of range! Aborted" << std::endl;
     }
 
 }
 
-void Overseer::list_jobs()
+void Overseer::run(std::size_t id)
+{
+    if( id <= _threads.size())
+    {
+        if(_threads[id] -> stopped() == true)
+            _threads[id] -> run();
+    }
+    else
+    {
+        std::cout << "Job id out of range! Aborted" << std::endl;
+    }
+
+}
+
+void Overseer::listJobs()
 {
     if(_threads.size() != 0) {
         std::cout <<
