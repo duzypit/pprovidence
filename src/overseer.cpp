@@ -81,10 +81,18 @@ void Overseer::listJobs()
         "e-mail " <<
         std::setw(20) << std::left <<
         "sleeping/working" <<
+        std::setw(20) << std::left <<
+        "last chceck status" <<
+        std::setw(30) << std::left <<
+        "last check time" <<
+
         std::endl;
 
         for(auto& b : _threads )
         {
+            std::time_t lastCheckTime = b->lastCheck();
+            std::tm tm = *std::localtime(&lastCheckTime);
+
             std::cout <<
             std::setw(4) << std::left <<
             std::distance(_threads.begin(), std::find(_threads.begin(), _threads.end(), b)) <<
@@ -98,7 +106,19 @@ void Overseer::listJobs()
             b->email() <<
             std::setw(20) << std::left <<
             (b->stopped() ? "sleeping" : "working") <<
-            std::endl;
+            std::setw(20) << std::left;
+            //last checked status & time before first chceck
+
+            if (tm.tm_year == 70)
+            {
+                std::cout << "-" << "-" << std::endl;
+            } else
+            {
+                std::cout <<
+                (b->lastCheckOk() ? "failed" : "ok") <<
+                std::put_time(&tm, "%F %T") <<
+                std::endl;
+            }
         }
     }
     else

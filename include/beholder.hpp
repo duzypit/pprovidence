@@ -38,6 +38,10 @@ public:
 
     std::string email();
 
+    bool lastCheckOk();
+
+    std::time_t lastCheck();
+
     bool stopped();
 
 private:
@@ -47,6 +51,8 @@ private:
     Request _r;
     std::mutex _m;
     std::condition_variable _cv;
+    std::time_t _lastCheck;
+    bool _lastCheckOk;
 
     //ture - stopped, false - working
     bool _terminate = false;

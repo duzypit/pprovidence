@@ -53,6 +53,14 @@ std::string Beholder::email()
     return _r.email;
 }
 
+bool Beholder::lastCheckOk(){
+    return _lastCheckOk;
+}
+
+std::time_t Beholder::lastCheck(){
+    return _lastCheck;
+}
+
 bool Beholder::stopped()
 {
     return _stop_thread;
@@ -61,32 +69,19 @@ bool Beholder::stopped()
 void Beholder::observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex){
     while(!_terminate)
     {
-        Report error(_r);
+        Report event(_r);
         std::unique_lock<std::mutex> beholderLock(_m);
         _cv.wait_for(beholderLock, std::chrono::duration<int>(_r.interval), [&]{ return _terminate; });
         if(!_terminate && !_stop_thread)
         {
             ProtocolMinion socket(_r.ip, _r.port);
-            error.msg = socket.result();
-            error.event_time = std::time(nullptr);
+            event.msg = socket.result();
+            event.event_time = std::time(nullptr);
+            _lastCheck = event.event_time;
+            _lastCheckOk = event.msg.first;
             std::unique_lock<std::mutex> lock(overseerMutex);
-            overseerMsgQueue.push_back(error);
+            overseerMsgQueue.push_back(event);
         }
     }
-/*
-    while(!_terminate)
-    {
-        Report error(_r);
-        std::unique_lock<std::mutex> beholderLock(_m);
-        _cv.wait_for(beholderLock, std::chrono::duration<int>(_r.interval), [&]{ return !_stop_thread; });
-        if(!_terminate && !_stop_thread)
-        {
-            ProtocolMinion socket(_r.ip, _r.port);
-            error.msg = socket.result();
-            error.event_time = std::time(nullptr);
-            std::unique_lock<std::mutex> lock(overseerMutex);
-            overseerMsgQueue.push_back(error);
-        }
-    }
-*/
+
 }
