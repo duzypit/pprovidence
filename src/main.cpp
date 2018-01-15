@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     Overseer master("log.txt");
     CommandParser cparser;
     GmailCreditenials gmailCreditenials;
-   // std::cout << std::string(80, '\n');
+    std::cout << std::string(80, '\n');
 
     if(argc >= 2)
     {
@@ -88,14 +88,10 @@ int main(int argc, char* argv[])
                 gmailCreditenials.password.clear();
                 std::cout<<"Gmail creditenials invalid!" << std::endl;
             }
-
-            //command.clear();
-            //break;
         }
         else if(command == "q")
         {
             std::cout << "Bye!" << std::endl;
-            //return 0;
             break;
         } else
         {
