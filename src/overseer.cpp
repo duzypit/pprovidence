@@ -7,7 +7,7 @@ Overseer::Overseer(std::string filename) : _threads(), _scribe(filename)
 
 Overseer::~Overseer()
 {
-    std::cout << "Overseer joined!" << std::endl;
+    //std::cout << "Overseer joined!" << std::endl;
 };
 
 void Overseer::dispatch(const Request& r)
@@ -82,7 +82,7 @@ void Overseer::listJobs()
         std::setw(20) << std::left <<
         "sleeping/working" <<
         std::setw(20) << std::left <<
-        "last chceck status" <<
+        "last status" <<
         std::setw(30) << std::left <<
         "last check time" <<
 
@@ -109,7 +109,7 @@ void Overseer::listJobs()
             std::setw(20) << std::left;
             //last checked status & time before first chceck
 
-            if (tm.tm_year == 70)
+            if (lastCheckTime == 0)
             {
                 std::cout << "-" << "-" << std::endl;
             } else
