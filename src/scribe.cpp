@@ -1,6 +1,6 @@
 #include "../include/scribe.hpp"
 
-Scribe::Scribe(const std::string& file) : _file(file.c_str(), std::ios::ate) {}
+Scribe::Scribe(const std::string& file) : _file(file.c_str(), std::ios::app) {}
 
 Scribe::~Scribe()
 {
@@ -9,7 +9,7 @@ Scribe::~Scribe()
     if (_thread.joinable())
     {
         _thread.join();
-        std::cout << "Scribe joined!" << std::endl;
+        //std::cout << "Scribe joined!" << std::endl;
     }
     _file.close();
 }
