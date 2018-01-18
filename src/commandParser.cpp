@@ -26,7 +26,13 @@ CommandParser& CommandParser::parse(const std::string& source)
     {
         if(splittedSource.size() >= 2)
         {
-            _data.job_id = atoi(splittedSource[1].c_str());
+            try{
+                _data.job_id = std::stoi(splittedSource[1].c_str());
+            } catch(const std::invalid_argument& e){
+                _data.valid = false;
+                std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
+            }
+
         } else
         {
             _data.valid = false;
@@ -34,9 +40,16 @@ CommandParser& CommandParser::parse(const std::string& source)
         }
     } else if(_data.command == 'r')
     {
-        if(splittedSource.size() >= 2)
+        if(splittedSource.size() >= 1)
         {
-            _data.job_id = atoi(splittedSource[1].c_str());
+             try{
+                _data.job_id = std::stoi(splittedSource[1].c_str());
+            } catch(const std::invalid_argument& e){
+                _data.valid = false;
+                std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
+            }
+
+           //_data.job_id = atoi(splittedSource[1].c_str());
         } else
         {
             _data.valid = false;
