@@ -65,3 +65,8 @@ Datagram TCP
 
 Połączenie klient - serwer
 ![klient - serwer](https://github.com/duzypit/pprovidence/blob/master/docs/TCP_IP_socket_diagram.png?raw=true)
+
+## Kompilacja
+
+sudo apt-get install libreadline6 libreadline6-dev
+
