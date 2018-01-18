@@ -11,7 +11,7 @@ Beholder::~Beholder()
         if(_thread.joinable())
         {
             _thread.join();
-            std::cout << "Beholder joined!" << std::endl;
+           // std::cout << "Beholder joined!" << std::endl;
         }
     }
 
