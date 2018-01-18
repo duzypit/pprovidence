@@ -15,7 +15,9 @@
 #include "../include/commandLoader.hpp"
 #include "../include/passwd.hpp"
 #include "../include/smtpSender.hpp"
-
+#include <stdlib.h> //for readline
+#include <readline/readline.h>
+#include <readline/history.h>
 
 
 int main(int argc, char* argv[])
@@ -24,6 +26,8 @@ int main(int argc, char* argv[])
     Overseer master("log.txt");
     CommandParser cparser;
     GmailCreditenials gmailCreditenials;
+	rl_bind_key('\t', rl_insert);
+
     std::cout << std::string(80, '\n');
 
     if(argc >= 2)
@@ -45,12 +49,23 @@ int main(int argc, char* argv[])
     std::string command;
 
     std::cout << "Type a command (q - quit, ? - help)." << std::endl;
+	char* buf;
     for(;;)
     {
-        std::cout << ">:";
+        //std::cout << ">:";
         command.clear();
+		while ((buf = readline(">: ")) != nullptr)
+		{
+			if(strlen(buf) > 0)
+			{
+				add_history(buf);
+			}
+			command = buf;
+			free(buf);
+		}
 
-        std::getline(std::cin, command);
+
+        //std::getline(std::cin, command);
         if(command == "?")
         {
             std::cout << std::endl;
