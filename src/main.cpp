@@ -60,6 +60,7 @@ int main(int argc, char* argv[])
             std::cout << "\ts <job_id> - stop job" << std::endl;
             std::cout << "\tr <job_id> - run again job" << std::endl;
             std::cout << "\tc - fill creditenials to Gmail accout for email notification sending" << std::endl;
+            std::cout << "\tq - guit" << std::endl;
             std::cout << std::endl;
         }
         else if(command == "c")
