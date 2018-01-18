@@ -50,20 +50,16 @@ int main(int argc, char* argv[])
 
     std::cout << "Type a command (q - quit, ? - help)." << std::endl;
 	char* buf;
-    for(;;)
+    while ((buf = readline(">: ")) != nullptr)
     {
-        //std::cout << ">:";
-        command.clear();
-		while ((buf = readline(">: ")) != nullptr)
-		{
-			if(strlen(buf) > 0)
-			{
-				add_history(buf);
-			}
-			command = buf;
-			free(buf);
-		}
+        if(strlen(buf) > 0)
+        {
+            add_history(buf);
+        }
 
+        command.clear();
+        command = buf;
+        free(buf);
 
         //std::getline(std::cin, command);
         if(command == "?")
