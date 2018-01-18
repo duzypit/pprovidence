@@ -24,19 +24,19 @@ ProtocolMinion::ProtocolMinion(std::string address, int port, int timeoutSec, in
             sock.send(_requestCommand.c_str(), _requestCommand.length());
         }
 
-        std::size_t recievedDataSize = 0;
-        recievedDataSize = sock.recv(buffer, 1023);
+        std::size_t receivedDataSize = 0;
+        receivedDataSize = sock.recv(buffer, 1023);
         buffer[1023] = '\0';
 
-        if(recievedDataSize > 0)
+        if(receivedDataSize > 0)
         {
             _msg.first = false;
             _msg.second = "Connection OK. ";
-            _msg.second += std::string("Recieved ") + std::to_string(recievedDataSize) + std::string(" bytes.");
+            _msg.second += std::string("Received ") + std::to_string(receivedDataSize) + std::string(" bytes.");
         } else
         {
             _msg.first = false;
-            _msg.second = "Connection established, recieved 0 bytes.";
+            _msg.second = "Connection established, received 0 bytes.";
         }
 
     } catch (const SocketException& e) {
