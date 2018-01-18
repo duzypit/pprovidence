@@ -51,7 +51,7 @@ private:
     Request _r;
     std::mutex _m;
     std::condition_variable _cv;
-    std::time_t _lastCheck;
+    std::time_t _lastCheck = 0;
     bool _lastCheckOk;
 
     //ture - stopped, false - working
