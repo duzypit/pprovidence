@@ -12,4 +12,4 @@ file(GLOB SOURCES "src/*.cpp")
 
 add_executable(pprovidence ${SOURCES})
 
-target_link_libraries(pprovidence pthread ssl crypto)
+target_link_libraries(pprovidence pthread ssl crypto readline)
