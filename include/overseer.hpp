@@ -15,7 +15,7 @@
 class Overseer
 {
 public:
-	Overseer(std::string filename);
+	Overseer();
 
     ~Overseer();
 
