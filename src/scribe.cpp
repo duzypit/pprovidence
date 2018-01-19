@@ -57,7 +57,7 @@ void Scribe::observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerM
     Report e;
     while(!_stop_thread){
        // _cv.wait(lock, [&](){ return (_stop_thread || !overseerMsgQueue.empty()); });
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
         while(!overseerMsgQueue.empty() && !_stop_thread){
             e = overseerMsgQueue[0];
