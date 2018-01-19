@@ -25,6 +25,9 @@ void Overseer::dispatch(const Request& r)
         case 'r':
             run(r.job_id);
             break;
+        case 'd':
+            deleteThread(r.job_id);
+            break;
         default:
             std::cout << "Overseer: Unknown command! Aborted." << std::endl;
     }
@@ -62,6 +65,22 @@ void Overseer::run(std::size_t id)
     {
         std::cout << "Job id out of range! Aborted" << std::endl;
     }
+
+}
+
+void Overseer::deleteThread(std::size_t id)
+{
+    if( id <= _threads.size())
+    {
+
+            _threads[id] -> stop();
+            _threads.erase(_threads.begin()+id);
+    }
+    else
+    {
+        std::cout << "Job id out of range! Aborted" << std::endl;
+    }
+
 
 }
 
