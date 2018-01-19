@@ -16,7 +16,7 @@
 class Scribe
 {
 public:
-    Scribe(const std::string& file);
+    Scribe();
     ~Scribe();
     void start(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex);
     void stop();
