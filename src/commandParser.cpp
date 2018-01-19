@@ -20,7 +20,9 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
             } else
             {
                 _data.valid = false;
-                std::cout << "commandParser: too few args for add command. Aborted." << std::endl;
+               std::cout << "commandParser: too few args for add command. Aborted." << std::endl;
+               // throw std::runtime_error("commandParser: too few args for add command. Aborted.");
+
             }
 
 
