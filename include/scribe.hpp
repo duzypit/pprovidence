@@ -20,7 +20,7 @@ public:
     ~Scribe();
     void start(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex);
     void stop();
-    void setUpMailer(GmailCreditenials creditenials);
+    void setUpMailer(GmailCredentials credentials);
 
 private:
 
@@ -29,7 +29,7 @@ private:
     bool _stop_thread;
     std::condition_variable _cv;
 
-    GmailCreditenials _creditenials;
+    GmailCredentials _credentials;
 
     void save(const Report& e);
 

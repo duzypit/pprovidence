@@ -25,8 +25,8 @@ void Scribe::stop()
     _stop_thread = true;
 }
 
-void Scribe::setUpMailer(GmailCreditenials creditenials){
-    _creditenials = creditenials;
+void Scribe::setUpMailer(GmailCredentials credentials){
+    _credentials = credentials;
 }
 
 void Scribe::save(const Report& e)
@@ -67,14 +67,14 @@ void Scribe::observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerM
             lock.unlock();
             save(e);
             //send email
-            if(e.msg.first == true && _creditenials.valid == true)
+            if(e.msg.first == true && _credentials.valid == true)
             {
                 SMTPSender sender;
-                std::string from = _creditenials.uname + "@gmail.com";
+                std::string from = _credentials.uname + "@gmail.com";
                 std::string subject = "PProvidence: host " + e.ip + " unreachable";
                 sender.sendSSL (
-                    _creditenials.uname, // userName
-                    _creditenials.password, // password
+                    _credentials.uname, // userName
+                    _credentials.password, // password
                     from, // from
                     e.email, // to
                     subject, // subject

@@ -29,7 +29,7 @@ public:
 
     void listJobs();
 
-    void setUpMailer(GmailCreditenials& creditenials);
+    void setUpMailer(GmailCredentials& credentials);
 
 private:
     std::vector<std::shared_ptr<Beholder>> _threads;

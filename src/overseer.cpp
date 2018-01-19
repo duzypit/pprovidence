@@ -127,8 +127,8 @@ void Overseer::listJobs()
     }
 }
 
-void Overseer::setUpMailer(GmailCreditenials& creditenials)
+void Overseer::setUpMailer(GmailCredentials& credentials)
 {
-    _scribe.setUpMailer(creditenials);
+    _scribe.setUpMailer(credentials);
 }
 
