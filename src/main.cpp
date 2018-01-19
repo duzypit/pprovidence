@@ -20,34 +20,32 @@
 #include <readline/history.h>
 
 
-int main(int argc, char* argv[])
+int main()
 {
 
-    Overseer master("log.txt");
+    Overseer master;
     CommandParser cparser;
     GmailCreditenials gmailCreditenials;
 	rl_bind_key('\t', rl_insert);
 
     std::cout << std::string(80, '\n');
 
-    if(argc >= 2)
+    //load cfg file hosts file
+    CommandLoader hl("pprovidence.cfg");
+    std::vector<std::string> requests;
+    requests = hl.requestsVector();
+    for(auto r : requests)
     {
-        //load hosts file
-        CommandLoader hl(argv[1]);
-        std::vector<std::string> requests;
-        requests = hl.requestsVector();
-        for(auto r : requests)
+
+        cparser.parse(r, false);
+        if(cparser.valid())
         {
-            cparser.parse(r);
-            if(cparser.valid())
-            {
-                master.dispatch(cparser.req_struct());
-            }
+            master.dispatch(cparser.req_struct());
         }
     }
 
     std::string command;
-
+    std::cout << "Project Providence (all-seeing eye) - monitoring of remote hosts in time." << std::endl;
     std::cout << "Type a command (q - quit, ? - help)." << std::endl;
 	char* buf;
     while ((buf = readline(">: ")) != nullptr)
