@@ -27,6 +27,8 @@ public:
 
     void run(std::size_t id);
 
+    void deleteThread(std::size_t id);
+
     void listJobs();
 
     void setUpMailer(GmailCredentials& credentials);
