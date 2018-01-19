@@ -7,6 +7,7 @@
 #include <mutex>
 #include <iomanip> //std::setw()
 #include <condition_variable>
+#include <cstdio> //remove()
 
 #include "../include/datatypes.hpp"
 #include "../include/beholder.hpp"
