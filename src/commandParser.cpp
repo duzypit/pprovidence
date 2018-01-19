@@ -29,7 +29,7 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
             }
 
 
-        } else if(_data.command == 's')
+        } else if(_data.command == 's' || _data.command == 'r' || _data.command == 'd')
         {
             if(splittedSource.size() >= 2)
             {
@@ -48,7 +48,7 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
                 throw std::runtime_error("commandParser: too few args for stop command. Aborted.");
 
             }
-        } else if(_data.command == 'r')
+        } /* else if(_data.command == 'r')
         {
             if(splittedSource.size() >= 1)
             {
@@ -68,7 +68,7 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
                 //std::cout << "commandParser: too few args for run command. Aborted." << std::endl;
             }
 
-        }
+        }*/
 
         if (addToCfgFile == true && _data.valid == true && _data.command == 'a'){
             //save command to config file
