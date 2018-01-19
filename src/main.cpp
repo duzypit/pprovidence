@@ -36,8 +36,11 @@ int main()
     requests = hl.requestsVector();
     for(auto r : requests)
     {
-
-        cparser.parse(r, false);
+        //try{
+            cparser.parse(r, false);
+        //} catch(const std::runtime_error& e){
+        //    std::cout << e.what() << std::endl;
+        //}
         if(cparser.valid())
         {
             master.dispatch(cparser.req_struct());
@@ -96,7 +99,7 @@ int main()
                 gmailCredentials.valid = false;
                 gmailCredentials.uname.clear();
                 gmailCredentials.password.clear();
-                std::cout<<"Gmail creditenials invalid!" << std::endl;
+                std::cout<<"Gmail credentials invalid!" << std::endl;
             }
         }
         else if(command == "q")
@@ -107,7 +110,7 @@ int main()
         {
             if(!command.empty())
             {
-                cparser.parse(command);
+                cparser.parse(command,true);
                 if(cparser.valid())
                 {
                     master.dispatch(cparser.req_struct());
