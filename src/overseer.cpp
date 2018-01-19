@@ -1,6 +1,6 @@
 #include "../include/overseer.hpp"
 
-Overseer::Overseer(std::string filename) : _threads(), _scribe(filename)
+Overseer::Overseer() : _threads(), _scribe()
 {
     _scribe.start(std::ref(_msgQueue), std::ref(_mutex));
 };
