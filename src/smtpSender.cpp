@@ -1,4 +1,5 @@
 #include "../include/smtpSender.hpp"
+
 SMTPSender::SMTPSender() : newline("\r\n"),  _server("smtp.gmail.com"), _port(465), socket(_server, _port), openSSL(socket.GetSocket()->nativeHandle())
 {
     fillReplyCodes();
@@ -154,7 +155,7 @@ void SMTPSender::sendSSL (const std::string& userName, const std::string& passwo
 
     //22l 2.0.0 closing connectioni
     msg = openSSL.read();
-    if (validReturnMsg(221, msg))
+    if (!validReturnMsg(221, msg))
     {
         SMTPReply(221, msg);
     }
