@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.5.1)
+set(CMAKE_CXX_STANDARD 14)
+project(commandParserTest)
+
+add_definitions(-std=c++14 -Wall -Wextra)
+#set(PROJECT_SOURCE_DIR done)
+find_package (Threads REQUIRED)
+set(NAME commandParserTest)
+file(GLOB SRCS *.cpp)
+add_executable(${NAME} ${SRCS})
+target_link_libraries(${NAME} gtest pthread)
