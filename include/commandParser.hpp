@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 #include "../include/datatypes.hpp"
 
@@ -13,7 +14,7 @@ public:
 
     CommandParser();
 
-    CommandParser& parse(const std::string& source);
+    CommandParser& parse(const std::string& source, bool addToCfgFile = false);
 
     std::vector<std::string> split(const std::string& source, char delim);
 
