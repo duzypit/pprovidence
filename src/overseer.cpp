@@ -75,6 +75,36 @@ void Overseer::deleteThread(std::size_t id)
 
             _threads[id] -> stop();
             _threads.erase(_threads.begin()+id);
+            //remove deleted line from config file
+
+            std::string sourceFile("pprovidence.cfg");
+            std::string destFile("tmp.cfg");
+            std::fstream ifs;
+            ifs.open(sourceFile);
+            std::ofstream swap;
+            swap.open(destFile, std::ios::app);
+
+            if (ifs && swap)
+            {
+                std::string line;
+                std::size_t counter = 0;
+                while(std::getline(ifs, line))
+                {
+                    if (counter != id){
+                        swap << line << std::endl;
+                    }
+                    ++counter;
+                }
+                swap.close();
+                ifs.close();
+                remove(sourceFile.c_str());
+                rename(destFile.c_str(), sourceFile.c_str());
+            }
+            else
+            {
+                std::cout << "Couldn't open " << sourceFile << " or " << destFile << " for reading" << std::endl;
+            }
+
     }
     else
     {
