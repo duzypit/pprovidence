@@ -25,7 +25,7 @@ int main()
 
     Overseer master;
     CommandParser cparser;
-    GmailCreditenials gmailCreditenials;
+    GmailCredentials gmailCredentials;
 	rl_bind_key('\t', rl_insert);
 
     std::cout << std::string(80, '\n');
@@ -66,10 +66,10 @@ int main()
             std::cout << "Commands:" << std::endl;
             std::cout << "\ta <adress> <20|21|22|25|80|110|995> <interval> <email> - add adress to watch, interval in seconds" << std::endl;
             std::cout << "\tl - list all current jobs with id's" << std::endl;
-            std::cout << "\ts <job_id> - stop job" << std::endl;
-            std::cout << "\tr <job_id> - run again job" << std::endl;
-            std::cout << "\tc - fill creditenials to Gmail accout for email notification sending" << std::endl;
-            std::cout << "\tq - guit" << std::endl;
+            std::cout << "\ts <job_id> - stop selected job" << std::endl;
+            std::cout << "\tr <job_id> - run selected job again" << std::endl;
+            std::cout << "\tc - fill credentials to Gmail accout for email notification sending" << std::endl;
+            std::cout << "\tq - quit" << std::endl;
             std::cout << std::endl;
         }
         else if(command == "c")
@@ -78,24 +78,24 @@ int main()
             SMTPSender sender;
 
             std::cout << "Gmail username >: ";
-            std::cin >> gmailCreditenials.uname;
+            std::cin >> gmailCredentials.uname;
 
             std::cout << "Gmail password >: ";
-            gmailCreditenials.password = p.getPassword();
+            gmailCredentials.password = p.getPassword();
             std::cout << std::endl;
 
-            if (sender.verifyCreditenials(gmailCreditenials.uname, gmailCreditenials.password))
+            if (sender.verifyCreditenials(gmailCredentials.uname, gmailCredentials.password))
             {
-                gmailCreditenials.valid = true;
-                master.setUpMailer(gmailCreditenials);
-                std::cout << "Gmail creditenials valid" << std::endl;
+                gmailCredentials.valid = true;
+                master.setUpMailer(gmailCredentials);
+                std::cout << "Gmail credentials valid" << std::endl;
 
             }
             else
             {
-                gmailCreditenials.valid = false;
-                gmailCreditenials.uname.clear();
-                gmailCreditenials.password.clear();
+                gmailCredentials.valid = false;
+                gmailCredentials.uname.clear();
+                gmailCredentials.password.clear();
                 std::cout<<"Gmail creditenials invalid!" << std::endl;
             }
         }

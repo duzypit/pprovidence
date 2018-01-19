@@ -24,7 +24,7 @@ struct Request
     bool valid;
 };
 
-struct GmailCreditenials
+struct GmailCredentials
 {
     std::string uname;
     std::string password;
