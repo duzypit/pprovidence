@@ -1,63 +1,72 @@
 #include "../include/commandParser.hpp"
 CommandParser::CommandParser(){}
 
-CommandParser& CommandParser::parse(const std::string& source)
+CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile)
 {
     std::vector<std::string> splittedSource = split(source, ' ');
     _data.valid = false;
-    _data.command = splittedSource[0][0];
-    _data.valid = true;
-    if(_data.command == 'a')
+    if(!source.empty())
     {
-        if(splittedSource.size() == 5)
+        _data.command = splittedSource[0][0];
+        _data.valid = true;
+        if(_data.command == 'a')
         {
-            _data.ip = splittedSource[1];
-            _data.email = splittedSource[4];
-            _data.interval = atoi(splittedSource[3].c_str());
-            _data.port = atoi(splittedSource[2].c_str());
-        } else
-        {
-            _data.valid = false;
-            std::cout << "commandParser: too few args for add command. Aborted." << std::endl;
-        }
-
-
-    } else if(_data.command == 's')
-    {
-        if(splittedSource.size() >= 2)
-        {
-            try{
-                _data.job_id = std::stoi(splittedSource[1].c_str());
-            } catch(const std::invalid_argument& e){
+            if(splittedSource.size() == 5)
+            {
+                _data.ip = splittedSource[1];
+                _data.email = splittedSource[4];
+                _data.interval = atoi(splittedSource[3].c_str());
+                _data.port = atoi(splittedSource[2].c_str());
+            } else
+            {
                 _data.valid = false;
-                std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
+                std::cout << "commandParser: too few args for add command. Aborted." << std::endl;
             }
 
-        } else
+
+        } else if(_data.command == 's')
         {
-            _data.valid = false;
-            std::cout << "commandParser: too few args for stop command. Aborted." << std::endl;
-        }
-    } else if(_data.command == 'r')
-    {
-        if(splittedSource.size() >= 1)
-        {
-             try{
-                _data.job_id = std::stoi(splittedSource[1].c_str());
-            } catch(const std::invalid_argument& e){
+            if(splittedSource.size() >= 2)
+            {
+                try{
+                    _data.job_id = std::stoi(splittedSource[1].c_str());
+                } catch(const std::invalid_argument& e){
+                    _data.valid = false;
+                    std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
+                }
+
+            } else
+            {
                 _data.valid = false;
-                std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
+                std::cout << "commandParser: too few args for stop command. Aborted." << std::endl;
+            }
+        } else if(_data.command == 'r')
+        {
+            if(splittedSource.size() >= 1)
+            {
+                 try{
+                    _data.job_id = std::stoi(splittedSource[1].c_str());
+                } catch(const std::invalid_argument& e){
+                    _data.valid = false;
+                    std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
+                }
+
+               //_data.job_id = atoi(splittedSource[1].c_str());
+            } else
+            {
+                _data.valid = false;
+                std::cout << "commandParser: too few args for run command. Aborted." << std::endl;
             }
 
-           //_data.job_id = atoi(splittedSource[1].c_str());
-        } else
-        {
-            _data.valid = false;
-            std::cout << "commandParser: too few args for run command. Aborted." << std::endl;
         }
 
+        if (addToCfgFile == true && _data.valid == true && _data.command == 'a'){
+            //save command to config file
+            std::ofstream cfg("pprovidence.cfg", std::ios::app);
+            cfg << source << std::endl;
+            cfg.close();
+        }
     }
-
     return *this;
 }
 
