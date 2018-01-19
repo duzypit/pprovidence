@@ -1,6 +1,6 @@
 #include "../include/scribe.hpp"
 
-Scribe::Scribe(const std::string& file) : _file(file.c_str(), std::ios::app) {}
+Scribe::Scribe() : _file(std::string("pprovidence.log").c_str(), std::ios::app) {}
 
 Scribe::~Scribe()
 {
