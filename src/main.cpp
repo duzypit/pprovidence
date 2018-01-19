@@ -36,11 +36,11 @@ int main()
     requests = hl.requestsVector();
     for(auto r : requests)
     {
-        //try{
+        try{
             cparser.parse(r, false);
-        //} catch(const std::runtime_error& e){
-        //    std::cout << e.what() << std::endl;
-        //}
+        } catch(const std::runtime_error& e){
+            std::cout << e.what() << std::endl;
+        }
         if(cparser.valid())
         {
             master.dispatch(cparser.req_struct());
@@ -53,7 +53,7 @@ int main()
 	char* buf;
     while ((buf = readline(">: ")) != nullptr)
     {
-        if(strlen(buf) > 0)
+if(strlen(buf) > 0)
         {
             add_history(buf);
         }
@@ -71,6 +71,7 @@ int main()
             std::cout << "\tl - list all current jobs with id's" << std::endl;
             std::cout << "\ts <job_id> - stop selected job" << std::endl;
             std::cout << "\tr <job_id> - run selected job again" << std::endl;
+            //std::cout << "\td <job_id> - delete selected job" << std:: endl;
             std::cout << "\tc - fill credentials to Gmail accout for email notification sending" << std::endl;
             std::cout << "\tq - quit" << std::endl;
             std::cout << std::endl;
@@ -110,7 +111,12 @@ int main()
         {
             if(!command.empty())
             {
-                cparser.parse(command,true);
+
+                try{
+                    cparser.parse(command, true);
+                } catch(const std::runtime_error& e){
+                    std::cout << e.what() << std::endl;
+                }
                 if(cparser.valid())
                 {
                     master.dispatch(cparser.req_struct());
