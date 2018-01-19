@@ -5,7 +5,10 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
 {
     std::vector<std::string> splittedSource = split(source, ' ');
     _data.valid = false;
-    if(!source.empty())
+    if(source.empty())
+    {
+        throw std::runtime_error("commandParser: empty command. Aborted.");
+    }
     {
         _data.command = splittedSource[0][0];
         _data.valid = true;
@@ -20,8 +23,8 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
             } else
             {
                 _data.valid = false;
-               std::cout << "commandParser: too few args for add command. Aborted." << std::endl;
-               // throw std::runtime_error("commandParser: too few args for add command. Aborted.");
+              // std::cout << "commandParser: too few args for add command. Aborted." << std::endl;
+                throw std::runtime_error("commandParser: too few args for add command. Aborted.");
 
             }
 
@@ -34,13 +37,16 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
                     _data.job_id = std::stoi(splittedSource[1].c_str());
                 } catch(const std::invalid_argument& e){
                     _data.valid = false;
-                    std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
+                    //std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
+                    throw std::runtime_error(std::string("commandParser(") + std::string(e.what()) + std::string("): invalid argument. Aborted."));
                 }
 
             } else
             {
                 _data.valid = false;
-                std::cout << "commandParser: too few args for stop command. Aborted." << std::endl;
+                //std::cout << "commandParser: too few args for stop command. Aborted." << std::endl;
+                throw std::runtime_error("commandParser: too few args for stop command. Aborted.");
+
             }
         } else if(_data.command == 'r')
         {
@@ -50,14 +56,16 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
                     _data.job_id = std::stoi(splittedSource[1].c_str());
                 } catch(const std::invalid_argument& e){
                     _data.valid = false;
-                    std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
+                    throw std::runtime_error(std::string("commandParser(") + std::string(e.what()) + std::string("): invalid argument. Aborted."));
+                    //std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
                 }
 
                //_data.job_id = atoi(splittedSource[1].c_str());
             } else
             {
                 _data.valid = false;
-                std::cout << "commandParser: too few args for run command. Aborted." << std::endl;
+                throw std::runtime_error("commandParser: too few args for stop command. Aborted.");
+                //std::cout << "commandParser: too few args for run command. Aborted." << std::endl;
             }
 
         }
