@@ -71,7 +71,7 @@ if(strlen(buf) > 0)
             std::cout << "\tl - list all current jobs with id's" << std::endl;
             std::cout << "\ts <job_id> - stop selected job" << std::endl;
             std::cout << "\tr <job_id> - run selected job again" << std::endl;
-            //std::cout << "\td <job_id> - delete selected job" << std:: endl;
+            std::cout << "\td <job_id> - delete selected job" << std:: endl;
             std::cout << "\tc - fill credentials to Gmail accout for email notification sending" << std::endl;
             std::cout << "\tq - quit" << std::endl;
             std::cout << std::endl;
