@@ -5,10 +5,7 @@ Overseer::Overseer() : _threads(), _scribe()
     _scribe.start(std::ref(_msgQueue), std::ref(_mutex));
 };
 
-Overseer::~Overseer()
-{
-    //std::cout << "Overseer joined!" << std::endl;
-};
+Overseer::~Overseer(){};
 
 void Overseer::dispatch(const Request& r)
 {
