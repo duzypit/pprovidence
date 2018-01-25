@@ -12,83 +12,76 @@ protected:
         EXPECT_EQ(cparser.parse(s).valid(), true);
     }
 
-    void testThrow(std:: string s)
+    void testThrow(std:: string s, std::string msg = "testThrow")
     {
-        EXPECT_ANY_THROW(cparser.parse(s));
+        EXPECT_ANY_THROW(cparser.parse(s)) << msg;
     }
 };
 
-TEST_F(cParserTestHelper, valid_string)
+TEST_F(cParserTestHelper, a_command)
 {
     testStringTrue("a google.pl 80 10 test@gmail.com");
+    testThrow("a google.pl 80 10", "one arg missing");
+    testThrow("a google.pl 80", "two args missing");
+    testThrow("a google.pl", "three args missing");
+    testThrow("a", "command only");
+    testThrow("", "empty string");
+    testThrow("a adf", "command a & random chars");
+
 }
 
-TEST(CommandParser, command_a)
+
+TEST_F(cParserTestHelper, l_command)
 {
-    std::string ca1("a google.pl 80 10 test@gmail.com");
-    CommandParser cparser;
-    cparser.parse(ca1);
-
-    EXPECT_EQ(cparser.valid(), true) << "all args set";
-
-    std::string ca2("a google.pl 80 10");
-    EXPECT_ANY_THROW(cparser.parse(ca2));
-
-    std::string ca3("a google.pl 80");
-    EXPECT_ANY_THROW(cparser.parse(ca3));
-
-    std::string ca4("a google.pl");
-    EXPECT_ANY_THROW(cparser.parse(ca4));
-
-    std::string ca5("a");
-    EXPECT_ANY_THROW(cparser.parse(ca5));
-
-    std::string ca6("");
-    EXPECT_ANY_THROW(cparser.parse(ca6));
-
-    std::string ca7("a adf");
-    EXPECT_ANY_THROW(cparser.parse(ca7));
-}
-
-
-TEST(CommandParser, command_l)
-{
-    std::string ca1("l");
-    CommandParser cparser;
-    cparser.parse(ca1);
-    EXPECT_EQ(cparser.valid(), true);
-
-    std::string ca2("l 0");
-    cparser.parse(ca2);
-    EXPECT_EQ(cparser.valid(), true);
-
-    std::string ca3("l 0 khaskdfdhask 4 65 ljlj");
-    cparser.parse(ca3);
-    EXPECT_EQ(cparser.valid(), true);
-
-    std::string ca4("");
-    EXPECT_ANY_THROW(cparser.parse(ca4));
+    testStringTrue("l");
+    //all things after command will be sliced by dispatcher
+    testStringTrue("l 0");
+    testStringTrue("l khaskdfdhask 4 65 ljlj");
+    testThrow("", "empty string");
 
 }
 
-TEST(CommandParser, command_s){
-    std::string ca1("s 0");
-    CommandParser cparser;
-    cparser.parse(ca1);
-    EXPECT_EQ(cparser.valid(), true);
+TEST_F(cParserTestHelper, s_command){
+    testStringTrue("s 0");
+    testThrow("s");
+    testThrow("");
+    testThrow("s adfaf");
+}
 
-    std::string ca2("s");
-    EXPECT_ANY_THROW(cparser.parse(ca2));
-
-    std::string ca3("");
-    EXPECT_ANY_THROW(cparser.parse(ca3));
-
-    std::string ca4("s adfaf");
-    EXPECT_ANY_THROW(cparser.parse(ca4));
-
+TEST_F(cParserTestHelper, r_command){
+    testStringTrue(" 0");
+    testThrow("r");
+    testThrow("");
+    testThrow("r adfaf");
 
 }
 
-TEST(CommandParser, command_r){
+TEST_F(cParserTestHelper, d_command){
+    testStringTrue("d 0");
+    testThrow("d");
+    testThrow("");
+    testThrow("d adfaf");
+
+}
+
+TEST_F(cParserTestHelper, c_command){
+    testStringTrue("c");
+    testThrow("");
+    //all things after command will be sliced by dispatcher
+    testStringTrue("c adfaf");
+}
+
+TEST_F(cParserTestHelper, q_command){
+    //all things after command will be sliced by dispatcher
+    testStringTrue("q 0");
+    testThrow("");
+    testStringTrue("q adfaf");
+}
+
+TEST_F(cParserTestHelper, question_mark_command){
+    //all things after command will be sliced by dispatcher
+    testStringTrue("? 0");
+    testThrow("");
+    testStringTrue("? adfaf");
 
 }
