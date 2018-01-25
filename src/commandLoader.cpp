@@ -14,7 +14,7 @@ std::vector<std::string> CommandLoader::requestsVector()
 void CommandLoader::dispatchFile(const std::string& filename)
 {
     std::fstream ifs(filename);
-    if (ifs)
+    if (ifs.is_open())
     {
         std::string line;
         while(std::getline(ifs, line))
