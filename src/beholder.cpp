@@ -1,5 +1,4 @@
 #include "../include/beholder.hpp"
-
 Beholder::Beholder(Request r) : _thread(), _stop_thread(true), _r(r) {}
 
 Beholder::~Beholder()
@@ -68,17 +67,19 @@ bool Beholder::stopped()
 
 void Beholder::observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex){
     //gets immediately results on run
-    bool firstCheck = true;
+    bool alreadyChecked = false;
 
     while(!_terminate)
     {
         Report event(_r);
-        if(!firstCheck)
+        if(alreadyChecked)
         {
             std::unique_lock<std::mutex> beholderLock(_m);
             _cv.wait_for(beholderLock, std::chrono::duration<int>(_r.interval), [&]{ return _terminate; });
         }
-        firstCheck = false;
+
+        if(!alreadyChecked) alreadyChecked = true;
+
         if(!_terminate && !_stop_thread)
         {
             ProtocolMinion socket(_r.ip, _r.port);
