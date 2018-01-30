@@ -1,3 +1,12 @@
+/*
+ * Arduino-base64 (header only) lib by Adam Rudd
+ * https://github.com/adamvr
+ *
+ * Improved by Tom Kislan
+ * https://github.com/tkislan
+ *
+ */
+
 #ifndef BASE64_H
 #define BASE64_H
 
