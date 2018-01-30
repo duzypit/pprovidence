@@ -12,11 +12,14 @@ class CommandLoader
 {
 public:
     CommandLoader(const std::string& filename);
+    CommandLoader(const std::string& filename, const std::string& command);
+
     ~CommandLoader();
 
     std::vector<std::string> requestsVector();
 
 private:
+    void save(const std::string& filename, const std::string& command);
 
     std::vector<std::string> _reqVec;
     void dispatchFile(const std::string& filename);
