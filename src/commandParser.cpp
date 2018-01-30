@@ -1,4 +1,5 @@
 #include "../include/commandParser.hpp"
+#include "../include/commandLoader.hpp"
 CommandParser::CommandParser(){}
 
 CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile)
@@ -48,33 +49,14 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
                 throw std::runtime_error("commandParser: too few args for stop command. Aborted.");
 
             }
-        } /* else if(_data.command == 'r')
-        {
-            if(splittedSource.size() >= 1)
-            {
-                 try{
-                    _data.job_id = std::stoi(splittedSource[1].c_str());
-                } catch(const std::invalid_argument& e){
-                    _data.valid = false;
-                    throw std::runtime_error(std::string("commandParser(") + std::string(e.what()) + std::string("): invalid argument. Aborted."));
-                    //std::cout << "commandParser(" << e.what() << "): invalid argument. Aborted."<< std::endl;
-                }
-
-               //_data.job_id = atoi(splittedSource[1].c_str());
-            } else
-            {
-                _data.valid = false;
-                throw std::runtime_error("commandParser: too few args for stop command. Aborted.");
-                //std::cout << "commandParser: too few args for run command. Aborted." << std::endl;
-            }
-
-        }*/
+        }
 
         if (addToCfgFile == true && _data.valid == true && _data.command == 'a'){
             //save command to config file
-            std::ofstream cfg("pprovidence.cfg", std::ios::app);
-            cfg << source << std::endl;
-            cfg.close();
+            //std::ofstream cfg("pprovidence.cfg", std::ios::app);
+            //cfg << source << std::endl;
+            //cfg.close();
+            CommandLoader cl("pprovidence.cfg", source);
         }
     }
     return *this;
