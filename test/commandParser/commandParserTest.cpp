@@ -1,5 +1,6 @@
-#include "../../include/commandParser.hpp"
+//#include "../../include/commandParser.hpp"
 #include "../../src/commandParser.cpp"
+#include "../../src/commandIOMinion.cpp"
 #include <gtest/gtest.h>
 
 class cParserTestHelper : public testing::Test
