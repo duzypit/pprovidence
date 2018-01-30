@@ -1,10 +1,10 @@
 #ifndef __SMTPSENDER_CPP__
 #define __SMTPSENDER_CPP__
-#include "openSSLBearer.hpp"
+#include "../lib/openSSLBearer.hpp"
 #include <iostream>
 #include <string>
 #include "smtpSocket.hpp"
-#include "base64.h"
+#include "../lib/base64.h"
 #include <map>
 #include <string>
 
