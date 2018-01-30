@@ -1,12 +1,9 @@
-#include "../../include/commandLoader.hpp"
-#include "../../src/commandLoader.cpp"
+#include "../../src/commandIOMinion.cpp"
 #include <gtest/gtest.h>
 #include <cstdio>
 #include <vector>
 #include <string>
-
-
-class cLoaderTestHelper : public testing::Test
+class cIOMinionTestHelper : public testing::Test
 {
 protected:
 
@@ -25,21 +22,21 @@ protected:
 
     void testFile()
     {
-        CommandLoader cLoader("test.txt");
+        CommandIOMinion cLoader("test.txt");
         std::vector<std::string> result = cLoader.requestsVector();
         EXPECT_EQ(result[0], std::string("success"));
     }
 };
 
-TEST(commandLoader, no_file_created)
+TEST(commandIOMinion, no_file_created)
 {
     testing::internal::CaptureStdout();
-    CommandLoader cLoader("anothertest.txt");
+    CommandIOMinion cLoader("anothertest.txt");
     std::string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ(output, std::string("Couldn't open anothertest.txt for reading\n"));
 }
 
-TEST_F(cLoaderTestHelper, succesfulRead)
+TEST_F(cIOMinionTestHelper, succesfulRead)
 {
     testFile();
 }
