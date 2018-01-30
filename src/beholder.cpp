@@ -67,11 +67,18 @@ bool Beholder::stopped()
 }
 
 void Beholder::observe(std::deque<Report>& overseerMsgQueue, std::mutex& overseerMutex){
+    //gets immediately results on run
+    bool firstCheck = true;
+
     while(!_terminate)
     {
         Report event(_r);
-        std::unique_lock<std::mutex> beholderLock(_m);
-        _cv.wait_for(beholderLock, std::chrono::duration<int>(_r.interval), [&]{ return _terminate; });
+        if(!firstCheck)
+        {
+            std::unique_lock<std::mutex> beholderLock(_m);
+            _cv.wait_for(beholderLock, std::chrono::duration<int>(_r.interval), [&]{ return _terminate; });
+        }
+        firstCheck = false;
         if(!_terminate && !_stop_thread)
         {
             ProtocolMinion socket(_r.ip, _r.port);
