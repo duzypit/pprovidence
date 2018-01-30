@@ -21,7 +21,7 @@ struct Request
     int port;
     std::size_t job_id;
     char command;
-    bool valid;
+    bool valid; //true = originated in protocolMinion ctor. It means connection problems. Scribe invokes e-mail sending mechanism based on this value
 };
 
 struct GmailCredentials
