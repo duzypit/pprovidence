@@ -1,7 +1,6 @@
 #include "../include/commandParser.hpp"
-#include "../include/commandLoader.hpp"
+#include "../include/commandIOMinion.hpp"
 CommandParser::CommandParser(){}
-
 CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile)
 {
     std::vector<std::string> splittedSource = split(source, ' ');
@@ -56,7 +55,7 @@ CommandParser& CommandParser::parse(const std::string& source, bool addToCfgFile
             //std::ofstream cfg("pprovidence.cfg", std::ios::app);
             //cfg << source << std::endl;
             //cfg.close();
-            CommandLoader cl("pprovidence.cfg", source);
+            CommandIOMinion cl("pprovidence.cfg", source);
         }
     }
     return *this;

@@ -1,29 +1,29 @@
-#include "../include/commandLoader.hpp"
-CommandLoader::CommandLoader(const std::string& filename)
+#include "../include/commandIOMinion.hpp"
+CommandIOMinion::CommandIOMinion(const std::string& filename)
 {
         dispatchFile(filename);
 }
 
-CommandLoader::CommandLoader(const std::string& filename, const std::string& command)
+CommandIOMinion::CommandIOMinion(const std::string& filename, const std::string& command)
 {
     save(filename, command);
 }
 
-void CommandLoader::save(const std::string& filename, const std::string& command)
+void CommandIOMinion::save(const std::string& filename, const std::string& command)
 {
     std::ofstream cfg(filename, std::ios::app);
     cfg << command << std::endl;
     cfg.close();
 }
 
-CommandLoader::~CommandLoader(){}
+CommandIOMinion::~CommandIOMinion(){}
 
-std::vector<std::string> CommandLoader::requestsVector()
+std::vector<std::string> CommandIOMinion::requestsVector()
 {
     return _reqVec;
 }
 
-void CommandLoader::dispatchFile(const std::string& filename)
+void CommandIOMinion::dispatchFile(const std::string& filename)
 {
     std::fstream cfg(filename);
     if (cfg.is_open())

@@ -1,5 +1,4 @@
 #include "../include/scribe.hpp"
-
 Scribe::Scribe() : _file(std::string("pprovidence.log").c_str(), std::ios::app) {}
 
 Scribe::~Scribe()
@@ -49,6 +48,7 @@ std::string Scribe::formatMsg(const Report& e)
             msg = oss.str();
     return msg;
 }
+
 
 
 

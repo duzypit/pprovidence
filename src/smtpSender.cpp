@@ -1,5 +1,4 @@
 #include "../include/smtpSender.hpp"
-
 SMTPSender::SMTPSender() : newline("\r\n"),  _server("smtp.gmail.com"), _port(465), socket(_server, _port), openSSL(socket.GetSocket()->nativeHandle())
 {
     fillReplyCodes();

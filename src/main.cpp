@@ -4,7 +4,6 @@
 #include <string>
 #include <chrono>
 #include <sstream>
-
 #include "../include/datatypes.hpp"
 #include "../include/commandParser.hpp"
 #include "../include/overseer.hpp"
@@ -12,17 +11,14 @@
 #include "../include/scribe.hpp"
 #include "../lib/practicalSocket.h"
 #include "../include/protocolMinion.hpp"
-#include "../include/commandLoader.hpp"
+#include "../include/commandIOMinion.hpp"
 #include "../include/passwd.hpp"
 #include "../include/smtpSender.hpp"
 #include <stdlib.h> //for readline
 #include <readline/readline.h>
 #include <readline/history.h>
-
-
 int main()
 {
-
     Overseer master;
     CommandParser cparser;
     GmailCredentials gmailCredentials;
@@ -31,7 +27,7 @@ int main()
     std::cout << std::string(80, '\n');
 
     //load cfg file hosts file
-    CommandLoader hl("pprovidence.cfg");
+    CommandIOMinion hl("pprovidence.cfg");
     std::vector<std::string> requests;
     requests = hl.requestsVector();
     for(auto r : requests)
@@ -53,7 +49,7 @@ int main()
 	char* buf;
     while ((buf = readline(">: ")) != nullptr)
     {
-if(strlen(buf) > 0)
+        if(strlen(buf) > 0)
         {
             add_history(buf);
         }
@@ -127,3 +123,4 @@ if(strlen(buf) > 0)
     }
     return 0;
 }
+

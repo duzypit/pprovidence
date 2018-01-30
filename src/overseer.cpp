@@ -1,5 +1,4 @@
 #include "../include/overseer.hpp"
-
 Overseer::Overseer() : _threads(), _scribe()
 {
     _scribe.start(std::ref(_msgQueue), std::ref(_mutex));
@@ -26,6 +25,7 @@ void Overseer::dispatch(const Request& r)
             deleteThread(r.job_id);
             break;
         default:
+            //throw std::runtime_error("Overseer: Unknown command! Aborted.");
             std::cout << "Overseer: Unknown command! Aborted." << std::endl;
     }
 }

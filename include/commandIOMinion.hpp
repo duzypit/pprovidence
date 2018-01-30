@@ -8,13 +8,13 @@
 #include <iterator>
 #include <iostream>
 
-class CommandLoader
+class CommandIOMinion
 {
 public:
-    CommandLoader(const std::string& filename);
-    CommandLoader(const std::string& filename, const std::string& command);
+    CommandIOMinion(const std::string& filename);
+    CommandIOMinion(const std::string& filename, const std::string& command);
 
-    ~CommandLoader();
+    ~CommandIOMinion();
 
     std::vector<std::string> requestsVector();
 
