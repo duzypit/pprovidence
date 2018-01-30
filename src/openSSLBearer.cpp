@@ -1,9 +1,7 @@
-#include "../include/openSSLBearer.hpp"
-// method can be one of SSLv2 method, SSLv3 method, TLSvl method or SSLv23 method.
+#include "../lib/openSSLBearer.hpp"
 OpenSSLBearer::OpenSSLBearer(int socket, const SSL_METHOD *method) : ctx_ (nullptr, SSL_CTX_free), ssl_ (nullptr, SSL_free)
 {
     initialize();
-   // std::cout << "OpenSSLBearer initialized" << std::endl;
     char errorBuf[errorBufSize];
     // Then an SSL CTX object is created as a framwork to establish TLS/SSL enabled connections.
     ctx_ = decltype(ctx_) (SSL_CTX_new(method), SSL_CTX_free);
@@ -15,8 +13,8 @@ OpenSSLBearer::OpenSSLBearer(int socket, const SSL_METHOD *method) : ctx_ (nullp
     // After the SSL object has been created using SSL new,
     // SSL set fd or SSL set bio can be used to associate the network connection with the object.
 
-    const int rstSetFd = SSL_set_fd( ssl_.get(), socket);
-    if (rstSetFd == 0 ) throw std::runtime_error (ERR_error_string(ERR_get_error(), errorBuf));
+    const int rstSetFd = SSL_set_fd(ssl_.get(), socket);
+    if (rstSetFd == 0) throw std::runtime_error (ERR_error_string(ERR_get_error(), errorBuf));
 
 
     // Then TLS/SSL handshake is performed using SSL accept or SSL connect respectively.
@@ -24,7 +22,6 @@ OpenSSLBearer::OpenSSLBearer(int socket, const SSL_METHOD *method) : ctx_ (nullp
     if (rstConnect == 0)
     {
         throw std::runtime_error (ERR_error_string(ERR_get_error(), errorBuf));
-//("handshake failed.");
     }
     else if (rstConnect < 0)
     {
@@ -34,7 +31,6 @@ OpenSSLBearer::OpenSSLBearer(int socket, const SSL_METHOD *method) : ctx_ (nullp
 
 void OpenSSLBearer::write(const std::string& msg)
 {
-    // SSL read and SSL write are used to read and write data on the TLS/SSL connection.
     const int rstWrite = SSL_write(ssl_.get(), msg.c_str(), msg.length());
     if (rstWrite == 0)
     {
@@ -75,7 +71,6 @@ std::string OpenSSLBearer::read()
 
 OpenSSLBearer::~OpenSSLBearer()
 {
-    // SSL shutdown can be used to shut down the TLS/SSL connection.
     SSL_shutdown(ssl_.get());
     FIPS_mode_set(0);
 
