@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.5.1)
+set(CMAKE_CXX_STANDARD 14)
+project(componentTest)
+
+add_definitions(-std=c++14 -Wall -Wextra)
+#set(PROJECT_SOURCE_DIR done)
+find_package (Threads REQUIRED)
+set(NAME scribeTest)
+file(GLOB SRCS *.cpp)
+set(MAIN ../main.cpp)
+add_executable(${NAME} ${SRCS} ${MAIN})
+target_link_libraries(${NAME} gtest pthread ssl crypto)
