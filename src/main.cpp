@@ -84,7 +84,7 @@ int main()
             gmailCredentials.password = p.getPassword();
             std::cout << std::endl;
 
-            if (sender.verifyCreditenials(gmailCredentials.uname, gmailCredentials.password))
+            if (sender.verifyCredentials(gmailCredentials.uname, gmailCredentials.password))
             {
                 gmailCredentials.valid = true;
                 master.setUpMailer(gmailCredentials);
