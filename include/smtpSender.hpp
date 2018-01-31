@@ -13,7 +13,7 @@ class SMTPSender
 public:
     SMTPSender();
 
-    bool verifyCreditenials(const std::string& userName, const std::string& password);
+    bool verifyCredentials(const std::string& userName, const std::string& password);
 
     void sendSSL (const std::string& userName, const std::string& password, const std::string& from, const std::string& to, const std::string& subject, const std::string& message);
 private:
@@ -26,7 +26,7 @@ private:
     OpenSSLBearer openSSL;
 
     std::map<int, std::string> _smtpReplyCodes;
-
+    bool handleResult(const int& code, std::string msg);
     void SMTPReply(const int& code, const std::string msg, bool visible = true);
 
     void fillReplyCodes();
