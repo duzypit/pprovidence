@@ -4,63 +4,43 @@ SMTPSender::SMTPSender() : newline("\r\n"),  _server("smtp.gmail.com"), _port(46
     fillReplyCodes();
 }
 
-bool SMTPSender::verifyCreditenials(const std::string& userName, const std::string& password)
+bool SMTPSender::verifyCredentials(const std::string& userName, const std::string& password)
 {
     std::string msg;
     bool success = false;
     //220 mx. google.com ESMTP
     msg = openSSL.read();
-    if (!validReturnMsg(220, msg))
-    {
-        SMTPReply(220, msg);
-    }
+    handleResult(220, msg);
 
     openSSL.write(std::string("EHLO ") + _server + newline);
 
     //250-mx.google.com at your service,
     msg = openSSL.read();
-    if (!validReturnMsg(250, msg))
-    {
-        SMTPReply(250, msg);
-    }
+    handleResult(250, msg);
 
     openSSL.write (std::string("AUTH LOGIN") + newline);
 
     //334
     msg = openSSL.read();
-    if (!validReturnMsg(334, msg))
-    {
-        SMTPReply(334, msg);
-    }
+    handleResult(334,msg);
 
     openSSL.write(EncodeBase64(userName) + newline);
     //334
     msg = openSSL.read();
-    if (!validReturnMsg(334, msg))
-    {
-        SMTPReply(334, msg);
-    }
+    handleResult(334,msg);
 
     openSSL.write(EncodeBase64(password) + newline);
 
     //235 2.7.0 Accepted // 535 not accepted
     msg = openSSL.read();
-    if (!validReturnMsg(235, msg))
-    {
-        SMTPReply(235, msg);
-    } else
-    {
-        success = true;
-    }
+    success = handleResult(235, msg);
 
     openSSL.write(std::string("QUIT") + newline);
 
     //22l 2.0.0 closing connectioni
     msg = openSSL.read();
-    if (!validReturnMsg(221, msg))
-    {
-        SMTPReply(221, msg);
-    }
+    handleResult(221, msg);
+
     return success;
 }
 
@@ -70,72 +50,48 @@ void SMTPSender::sendSSL (const std::string& userName, const std::string& passwo
 
     //220 mx. google.com ESMTP
     msg = openSSL.read();
-    if (!validReturnMsg(220, msg))
-    {
-        SMTPReply(220, msg);
-    }
+    handleResult(220, msg);
 
     openSSL.write(std::string("EHLO ") + _server + newline);
 
     //250-mx.google.com at your service,
     msg = openSSL.read();
-    if (!validReturnMsg(250, msg))
-    {
-        SMTPReply(250, msg);
-    }
+    handleResult(250, msg);
 
     openSSL.write (std::string("AUTH LOGIN") + newline);
 
     //334
     msg = openSSL.read();
-    if (!validReturnMsg(334, msg))
-    {
-        SMTPReply(334, msg);
-    }
+    handleResult(334,msg);
 
     openSSL.write(EncodeBase64(userName) + newline);
     //334
     msg = openSSL.read();
-    if (!validReturnMsg(334, msg))
-    {
-        SMTPReply(334, msg);
-    }
+    handleResult(334,msg);
 
     openSSL.write(EncodeBase64(password) + newline);
 
     //235 2.7.0 Accepted // 535 not accepted
     msg = openSSL.read();
-    if (!validReturnMsg(235, msg))
-    {
-        SMTPReply(235, msg);
-    }
+    handleResult(235,msg);
 
     openSSL.write(std::string("MAIL FROM: <") + from + " >" + newline);
 
     //250 2.1.0 0K
     msg = openSSL.read();
-    if (!validReturnMsg(250, msg))
-    {
-        SMTPReply(250, msg);
-    }
+    handleResult(250, msg);
 
     openSSL.write (std::string("RCPT To:<") + to + ">" + newline);
 
     //250 2.1.5 0K
     msg = openSSL.read();
-    if (!validReturnMsg(250, msg))
-    {
-        SMTPReply(250, msg);
-    }
+    handleResult(250,msg);
 
     openSSL.write(std::string("DATA") + newline);
 
     //354 Go ahead
     msg = openSSL.read();
-    if (!validReturnMsg(354, msg))
-    {
-        SMTPReply(354, msg);
-    }
+    handleResult(354, msg);
 
     openSSL.write(std::string("From: <") + from + ">" + newline);
     openSSL.write(std::string("To: <") + to + ">" + newline);
@@ -144,21 +100,26 @@ void SMTPSender::sendSSL (const std::string& userName, const std::string& passwo
 
     //250 2.0.0 OK
     msg = openSSL.read();
-    if (!validReturnMsg(250, msg))
-    {
-        SMTPReply(250, msg);
-    }
+    handleResult(250, msg);
 
 
     openSSL.write(std::string("QUIT") + newline);
 
     //22l 2.0.0 closing connectioni
     msg = openSSL.read();
-    if (!validReturnMsg(221, msg))
+    handleResult(221,msg);
+
+}
+
+bool SMTPSender::handleResult(const int& code, std::string msg)
+{
+    if(!validReturnMsg(code, msg))
     {
-        SMTPReply(221, msg);
+        SMTPReply(code, msg);
+        return false;
     }
 
+    return true;
 }
 
 void SMTPSender::SMTPReply(const int& code, const std::string msg, bool visible)
@@ -172,7 +133,6 @@ void SMTPSender::SMTPReply(const int& code, const std::string msg, bool visible)
         } else {
             std::cout << "smtpSender: code should be: " << code << ", is: " << recCode << ", msg:  " << recCodeMsg->second << std::endl;
         }
-
     }
 }
 
@@ -207,8 +167,6 @@ void SMTPSender::fillReplyCodes()
         {554,	"Transaction failed"}
     };
 }
-
-
 
 bool SMTPSender::validReturnMsg(const int& expectedCode, std::string msg)
 {
